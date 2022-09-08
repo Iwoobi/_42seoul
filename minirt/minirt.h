@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 18:06:43 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/07 20:08:34 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/08 18:39:07 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,44 @@ typedef struct s_cylinder
 	struct s_cylinder	*next;
 }	t_cylinder;
 
+typedef	struct s_alight
+{
+	double			ratio;
+	unsigned char	rgb[3];
+	struct s_alight	*next;
+}	t_alight;
+ 
+typedef	struct s_cam
+{
+	double			x[3];
+	double			n[3];
+	double			fov;
+	struct s_cam	*next;
+}	t_cam;
+
+typedef struct s_light
+{
+	double			x[3];
+	double			ratio;
+	unsigned char	rgb[3];
+	struct s_light	*next;
+}	t_light;
+
+
 typedef struct s_data
 {
+	t_light		*l;
+	t_alight	*al;
+	t_cam		*cam;
 	t_sphere	*sp;
 	t_plane		*pl;
 	t_cylinder	*cy;
+	int			count_l;
+	int			count_al;
+	int			count_cam;
+	int			count_sp;
+	int			count_pl;
+	int			count_cy;
 }	t_data;
 
 typedef struct s_mlx
@@ -75,5 +108,8 @@ typedef struct s_mlx
 
 /*데이터*/
 int	ft_strlen(char *str);
+
+
+double	ft_char_double(char *str, int *count);
 
 #endif

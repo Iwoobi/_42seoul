@@ -6,11 +6,11 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 23:11:54 by youhan            #+#    #+#             */
-/*   Updated: 2022/05/26 23:12:02 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/08 18:14:29 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_fdf.h"
+#include "minirt.h"
 
 void	ft_mlx_init(t_mlx *my_mlx, int size)
 {
