@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 18:43:50 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/08 20:18:52 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/08 20:28:29 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	push_rgb(unsigned char *rgb, char **str)
 	while (i < 3)
 	{
 		count = 0;
-		rgb[i] = ft_char_double(*str, &count);
+		rgb[i] = (unsigned char)ft_char_double(*str, &count);
 		*str += count;
 		if (**str != ',' && i != 2)
 			print_error("check data");
@@ -157,18 +157,42 @@ void	push_c(char *str, t_mlx *mlx)
 	mlx->data.cam = save;
 }
 
+void	push_l(char *str, t_mlx *mlx)
+{
+	int		count;
+	t_light	*save;
+
+	save = mlx->data.l;
+	count = 0;
+	str++;
+	while (mlx->data.count_l > count)
+	{
+		if (mlx->data.count_l - count == 1)
+		{
+			mlx->data.l->next = (t_light *)malloc(sizeof(t_light) * 1);
+			if (mlx->data.l->next == NULL)
+				print_error("malloc error");
+		}
+		mlx->data.l = mlx->data.l->next;
+		count++;
+	}
+	count = 0;
+	mlx->data.count_l += 1;
+	push_x_y_z(&(mlx->data.l->x[0]), &str);
+	mlx->data.l->ratio = ft_char_double(str, &count);
+	str += count;
+	push_rgb(&(mlx->data.l->rgb[0]), &str);
+	mlx->data.l = save;
+}
+
 void	check_obj(char *str, t_mlx *mlx)
 {
-	if (div_str(str, "A") == 1)
-	{
+	if (div_str(str, "A") == 1)\
 		push_a(str, mlx);
-	}
 	else if (div_str(str, "C") == 1)
-	{
 		push_c(str, mlx);
-	}
-	// else if (div_str(str, "L"))
-	// 	push_l(str, mlx);
+	else if (div_str(str, "L"))
+		push_l(str, mlx);
 	// else if (div_str(str, "sp"))
 	// 	push_sp(str, mlx);
 	// else if (div_str(str, "pl"))
@@ -218,7 +242,9 @@ void	init_mlx_data(t_mlx *mlx)
 	mlx->data.count_cy = 0;
 	mlx->data.al = (t_alight *)malloc(sizeof(t_alight) * 1);
 	mlx->data.cam = (t_cam *)malloc(sizeof(t_cam) * 1);
+	mlx->data.l = (t_light *)malloc(sizeof(t_light) * 1);
 }
+
 
 void	test_c(t_mlx mlx)
 {
@@ -240,6 +266,30 @@ void	test_c(t_mlx mlx)
 		}
 		printf("FOV : %f\n", mlx.data.cam->fov);
 		mlx.data.cam = mlx.data.cam->next;
+	}
+}
+
+
+void	test_l(t_mlx mlx)
+{
+	int i;
+	printf("\ntest light\n");
+	while (mlx.data.l != NULL)
+	{
+		i = 0;
+		while (i < 3)
+		{
+			printf("x[i] : %f\n",mlx.data.l->x[i]);
+			i++;
+		}
+		printf("ratio : %f\n", mlx.data.l->ratio);
+		i = 0;
+		while (i < 3)
+		{
+			printf("rgb[i] : %d\n",mlx.data.l->rgb[i]);
+			i++;
+		}
+		mlx.data.l = mlx.data.l->next;
 	}
 }
 
@@ -271,7 +321,6 @@ int	main(int argc, char **argv)
 	check_input(argv[1], &mlx);
 	test_a(mlx);
 	test_c(mlx);
-		test_a(mlx);
-	test_c(mlx);
+	test_l(mlx);
 
 }
