@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 18:43:50 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/08 20:28:29 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/16 13:49:31 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ void	push_x_y_z(double *data, char **str)
 		*str += count;
 		if (**str != ',' && i != 2)
 			print_error("check data");
-		(*str)++;
+		if (i != 2)
+			(*str)++;
 		i++;
 	}
 }
@@ -95,10 +96,19 @@ void	push_rgb(unsigned char *rgb, char **str)
 		rgb[i] = (unsigned char)ft_char_double(*str, &count);
 		*str += count;
 		if (**str != ',' && i != 2)
-			print_error("check data");
-		(*str)++;
+			print_error("check , data");
+		if (i != 2)
+			(*str)++;
 		i++;
 	}
+}
+
+void	null_check(char *str)
+{
+	while ((*str >= 9 && *str <= 13) || *str == 32)
+		str++;
+	if (*str != '\0')
+		print_error("check input data");
 }
 
 void	push_a(char *str, t_mlx *mlx)
@@ -116,6 +126,7 @@ void	push_a(char *str, t_mlx *mlx)
 			mlx->data.al->next = (t_alight *)malloc(sizeof(t_alight) * 1);
 			if (mlx->data.al->next == NULL)
 				print_error("malloc error");
+			mlx->data.al->next->next = NULL;
 		}
 		mlx->data.al = mlx->data.al->next;
 		count++;
@@ -126,6 +137,7 @@ void	push_a(char *str, t_mlx *mlx)
 	mlx->data.al->next = NULL;
 	str += count;
 	push_rgb(&(mlx->data.al->rgb[0]), &str);
+	null_check(str);
 	mlx->data.al = save;
 }
 
@@ -136,7 +148,7 @@ void	push_c(char *str, t_mlx *mlx)
 
 	save = mlx->data.cam;
 	count = 0;
-	str++;
+	str += 2;
 	while (mlx->data.count_cam > count)
 	{
 		if (mlx->data.count_cam - count == 1)
@@ -144,6 +156,7 @@ void	push_c(char *str, t_mlx *mlx)
 			mlx->data.cam->next = (t_cam *)malloc(sizeof(t_cam) * 1);
 			if (mlx->data.cam->next == NULL)
 				print_error("malloc error");
+			mlx->data.cam->next->next = NULL;
 		}
 		mlx->data.cam = mlx->data.cam->next;
 		count++;
@@ -154,6 +167,7 @@ void	push_c(char *str, t_mlx *mlx)
 	push_x_y_z(&(mlx->data.cam->n[0]), &str);
 	mlx->data.cam->fov = ft_char_double(str, &count);
 	str += count;
+	null_check(str);
 	mlx->data.cam = save;
 }
 
@@ -172,6 +186,7 @@ void	push_l(char *str, t_mlx *mlx)
 			mlx->data.l->next = (t_light *)malloc(sizeof(t_light) * 1);
 			if (mlx->data.l->next == NULL)
 				print_error("malloc error");
+			mlx->data.l->next->next = NULL;
 		}
 		mlx->data.l = mlx->data.l->next;
 		count++;
@@ -182,26 +197,120 @@ void	push_l(char *str, t_mlx *mlx)
 	mlx->data.l->ratio = ft_char_double(str, &count);
 	str += count;
 	push_rgb(&(mlx->data.l->rgb[0]), &str);
+	null_check(str);
 	mlx->data.l = save;
+}
+
+void	push_sp(char *str, t_mlx *mlx)
+{
+	int			count;
+	t_sphere	*save;
+
+	save = mlx->data.sp;
+	count = 0;
+	str += 2;
+	while (mlx->data.count_sp > count)
+	{
+		if (mlx->data.count_sp - count == 1)
+		{
+			mlx->data.sp->next = (t_sphere *)malloc(sizeof(t_sphere) * 1);
+			if (mlx->data.sp->next == NULL)
+				print_error("malloc error");
+			mlx->data.sp->next->next = NULL;
+		}
+		mlx->data.sp = mlx->data.sp->next;
+		count++;
+	}
+	count = 0;
+	mlx->data.count_sp += 1;
+	push_x_y_z(&(mlx->data.sp->c[0]), &str);
+	mlx->data.sp->r = ft_char_double(str, &count);
+	str += count;
+	push_rgb(&(mlx->data.sp->rgb[0]), &str);
+	null_check(str);
+	mlx->data.sp = save;
+}
+
+void	push_pl(char *str, t_mlx *mlx)
+{
+	int		count;
+	t_plane	*save;
+
+	save = mlx->data.pl;
+	count = 0;
+	str += 2;
+	while (mlx->data.count_pl > count)
+	{
+		if (mlx->data.count_pl - count == 1)
+		{
+			mlx->data.pl->next = (t_plane *)malloc(sizeof(t_plane) * 1);
+			if (mlx->data.pl->next == NULL)
+				print_error("malloc error");
+			mlx->data.pl->next->next = NULL;
+		}
+		mlx->data.pl = mlx->data.pl->next;
+		count++;
+	}
+	count = 0;
+	mlx->data.count_pl += 1;
+	push_x_y_z(&(mlx->data.pl->x[0]), &str);
+	push_x_y_z(&(mlx->data.pl->n[0]), &str);
+	push_rgb(&(mlx->data.pl->rgb[0]), &str);
+	null_check(str);
+	mlx->data.pl = save;
+}
+
+void	push_cy(char *str, t_mlx *mlx)
+{
+	int		count;
+	t_cylinder	*save;
+
+	save = mlx->data.cy;
+	count = 0;
+	str += 2;
+	while (mlx->data.count_cy > count)
+	{
+		if (mlx->data.count_cy - count == 1)
+		{
+			mlx->data.cy->next = (t_cylinder *)malloc(sizeof(t_cylinder) * 1);
+			if (mlx->data.cy->next == NULL)
+				print_error("malloc error");
+			mlx->data.cy->next->next = NULL;
+		}
+		mlx->data.cy = mlx->data.cy->next;
+		count++;
+	}
+	count = 0;
+	mlx->data.count_cy += 1;
+	push_x_y_z(&(mlx->data.cy->c[0]), &str);
+	push_x_y_z(&(mlx->data.cy->n[0]), &str);
+	mlx->data.cy->r = ft_char_double(str, &count);
+	str += count;
+	count = 0;
+	mlx->data.cy->h = ft_char_double(str, &count);
+	str += count;
+	push_rgb(&(mlx->data.cy->rgb[0]), &str);
+	null_check(str);
+	mlx->data.cy = save;
 }
 
 void	check_obj(char *str, t_mlx *mlx)
 {
-	if (div_str(str, "A") == 1)\
+	if (div_str(str, "A") == 1)
 		push_a(str, mlx);
 	else if (div_str(str, "C") == 1)
 		push_c(str, mlx);
-	else if (div_str(str, "L"))
+	else if (div_str(str, "L") == 1)
 		push_l(str, mlx);
-	// else if (div_str(str, "sp"))
-	// 	push_sp(str, mlx);
-	// else if (div_str(str, "pl"))
-	// 	push_pl(str, mlx);
-	// else if (div_str(str, "cy"))
-	// 	push_cy(str, mlx);
+	else if (div_str(str, "sp") == 1)
+		push_sp(str, mlx);
+	else if (div_str(str, "pl") == 1)
+		push_pl(str, mlx);
+	else if (div_str(str, "cy") == 1)
+		push_cy(str, mlx);
 	else if (*str != '\0')
 	{
-		printf("%s\n",str);
+		printf("here\n");
 		print_error("check data");
 	}
 }
@@ -218,7 +327,6 @@ void	push_data(int fd, t_mlx *mlx)
 	str = get_next_line(fd);
 	while (str != NULL)
 	{
-		printf("%s",str);
 		if (!(*str == '\n' && ft_strlen(str) == 1))
 			check_push_data(str, mlx);
 		free(str);
@@ -243,6 +351,19 @@ void	init_mlx_data(t_mlx *mlx)
 	mlx->data.al = (t_alight *)malloc(sizeof(t_alight) * 1);
 	mlx->data.cam = (t_cam *)malloc(sizeof(t_cam) * 1);
 	mlx->data.l = (t_light *)malloc(sizeof(t_light) * 1);
+	mlx->data.pl = (t_plane *)malloc(sizeof(t_plane) * 1);
+	mlx->data.cy = (t_cylinder *)malloc(sizeof(t_cylinder) * 1);
+	mlx->data.sp = (t_sphere *)malloc(sizeof(t_sphere) * 1);
+	if (mlx->data.al == NULL || mlx->data.cam == NULL || mlx->data.l == NULL)
+		print_error("malloc error");
+	if (mlx->data.pl == NULL || mlx->data.cy == NULL || mlx->data.sp == NULL)
+		print_error("malloc error");
+	mlx->data.al->next = NULL;
+	mlx->data.l->next = NULL;
+	mlx->data.cam->next = NULL;
+	mlx->data.pl->next = NULL;
+	mlx->data.cy->next = NULL;
+	mlx->data.sp->next = NULL;
 }
 
 
@@ -255,13 +376,13 @@ void	test_c(t_mlx mlx)
 		i = 0;
 		while (i < 3)
 		{
-			printf("x[i] : %f\n",mlx.data.cam->x[i]);
+			printf("x[%d] : %f\n",i,mlx.data.cam->x[i]);
 			i++;
 		}
 		i = 0;
 		while (i < 3)
 		{
-			printf("n[i] : %f\n",mlx.data.cam->n[i]);
+			printf("n[%d] : %f\n",i,mlx.data.cam->n[i]);
 			i++;
 		}
 		printf("FOV : %f\n", mlx.data.cam->fov);
@@ -279,7 +400,7 @@ void	test_l(t_mlx mlx)
 		i = 0;
 		while (i < 3)
 		{
-			printf("x[i] : %f\n",mlx.data.l->x[i]);
+			printf("x[%d] : %f\n",i,mlx.data.l->x[i]);
 			i++;
 		}
 		printf("ratio : %f\n", mlx.data.l->ratio);
@@ -304,10 +425,94 @@ void	test_a(t_mlx mlx)
 		i = 0;
 		while (i < 3)
 		{
-			printf("rgb[i] : %d\n",mlx.data.al->rgb[i]);
+			printf("rgb[%d] : %d\n",i,mlx.data.al->rgb[i]);
 			i++;
 		}
 		mlx.data.al = mlx.data.al->next;
+	}
+}
+
+void	test_pl(t_mlx mlx)
+{
+	int i;
+	
+	printf("\ntest pl\n");
+	while (mlx.data.pl != NULL)
+	{
+		i = 0;
+		while (i < 3)
+		{
+			printf("x[%d] : %f\n",i,mlx.data.pl->x[i]);
+			i++;
+		}
+		i = 0;
+		while (i < 3)
+		{
+			printf("n[%d] : %f\n",i,mlx.data.pl->n[i]);
+			i++;
+		}
+		i = 0;
+		while (i < 3)
+		{
+			printf("rgb[%d] : %d\n",i,mlx.data.pl->rgb[i]);
+			i++;
+		}
+		mlx.data.pl = mlx.data.pl->next;
+	}
+}
+
+void	test_sp(t_mlx mlx)
+{
+	int i;
+	
+	printf("\ntest sp\n");
+	while (mlx.data.sp != NULL)
+	{
+		i = 0;
+		while (i < 3)
+		{
+			printf("c[%d] : %f\n",i,mlx.data.sp->c[i]);
+			i++;
+		}
+		printf("r : %f\n", mlx.data.sp->r);
+		i = 0;
+		while (i < 3)
+		{
+			printf("rgb[%d] : %d\n",i,mlx.data.sp->rgb[i]);
+			i++;
+		}
+		mlx.data.sp = mlx.data.sp->next;
+	}
+}
+
+void	test_cy(t_mlx mlx)
+{
+	int i;
+	
+	printf("\ntest cy\n");
+	while (mlx.data.cy != NULL)
+	{
+		i = 0;
+		while (i < 3)
+		{
+			printf("x[%d] : %f\n",i,mlx.data.cy->c[i]);
+			i++;
+		}
+		i = 0;
+		while (i < 3)
+		{
+			printf("n[%d] : %f\n",i,mlx.data.cy->n[i]);
+			i++;
+		}
+		printf("r : %f\n", mlx.data.cy->r);
+		printf("h : %f\n", mlx.data.cy->h);
+		i = 0;
+		while (i < 3)
+		{
+			printf("rgb[%d] : %d\n",i,mlx.data.cy->rgb[i]);
+			i++;
+		}
+		mlx.data.cy = mlx.data.cy->next;
 	}
 }
 
@@ -322,5 +527,8 @@ int	main(int argc, char **argv)
 	test_a(mlx);
 	test_c(mlx);
 	test_l(mlx);
+	test_cy(mlx);
+	test_pl(mlx);
+	test_sp(mlx);
 
 }
