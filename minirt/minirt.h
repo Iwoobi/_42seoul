@@ -6,12 +6,16 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 18:06:43 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/08 18:39:07 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/19 22:18:16 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
+
+# define _USE_MATH_DEFINES
+# define PRESS 2
+# define CLOSED 17
 
 # include <stdio.h>
 # include "get_next_line.h"
@@ -98,18 +102,37 @@ typedef struct s_data
 	int			count_cy;
 }	t_data;
 
+typedef struct s_mdata
+{
+	double	rot[9];
+	double	a;
+	double	b;
+	double	m[3];
+}	t_mdata;
+
 typedef struct s_mlx
 {
 	void	*mlx;
 	void	*win;
+	t_mdata	mdata;
 	t_img	img;
 	t_data	data;
+	int		size[2];
 }	t_mlx;
 
 /*데이터*/
 int	ft_strlen(char *str);
-
-
 double	ft_char_double(char *str, int *count);
+
+/*mlx*/
+void	ft_mlx_init(t_mlx *my_mlx);
+
+/*print*/
+void	test_a(t_mlx mlx);
+void	test_c(t_mlx mlx);
+void	test_l(t_mlx mlx);
+void	test_cy(t_mlx mlx);
+void	test_sp(t_mlx mlx);
+void	test_pl(t_mlx mlx);
 
 #endif

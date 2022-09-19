@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 18:43:50 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/16 13:49:31 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/19 22:38:23 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,14 +334,194 @@ void	push_data(int fd, t_mlx *mlx)
 	}
 }
 
+void	close_non_data(t_mlx *mlx)
+{
+	if (mlx->data.count_al == 0)
+	{
+		free(mlx->data.al);
+		mlx->data.al = NULL;
+	}
+	if (mlx->data.count_cy == 0)
+	{
+		free(mlx->data.cy);
+		mlx->data.cy = NULL;
+	}
+	if (mlx->data.count_l == 0)
+	{
+		free(mlx->data.l);
+		mlx->data.l = NULL;
+	}
+	if (mlx->data.count_pl == 0)
+	{
+		free(mlx->data.pl);
+		mlx->data.pl = NULL;
+	}
+	if (mlx->data.count_sp == 0)
+	{
+		free(mlx->data.sp);
+		mlx->data.sp = NULL;
+	}
+}
+
+void	check_cam_error(t_mlx *mlx)
+{
+	if (mlx->data.count_cam == 0)
+		print_error("check cam data");
+}
+
+void	init_rot_val(t_mdata *data)
+{
+	data->rot[0] = sin(data->a) * cos(data->b);
+	data->rot[1] = -sin(data->b);
+	data->rot[2] = cos(data->a) * cos(data->b);
+	data->rot[3] = sin(data->a) * sin(data->b);
+	data->rot[4] = cos(data->b);
+	data->rot[5] = cos(data->a) * sin(data->b);
+	data->rot[6] = -cos(data->a);
+	data->rot[7] = 0;
+	data->rot[8] = sin(data->a);
+}
+
+void	updata_rot_l(t_mlx *mlx, t_mdata data)
+{
+	t_light	*save;
+	double	x[3];
+
+	save = mlx->data.l;
+	while (mlx->data.l != NULL)
+	{
+		x[0] = mlx->data.l->x[0];
+		x[1] = mlx->data.l->x[1];
+		x[2] = mlx->data.l->x[2];
+		mlx->data.l->x[0] = data.rot[0] * x[0] + data.rot[1] * x[1] + data.rot[2] * x[2] - data.m[0];
+		mlx->data.l->x[1] = data.rot[3] * x[0] + data.rot[4] * x[1] + data.rot[5] * x[2] - data.m[1];
+		mlx->data.l->x[2] = data.rot[6] * x[0] + data.rot[7] * x[1] + data.rot[8] * x[2] - data.m[2];
+		mlx->data.l = mlx->data.l->next;
+	}
+	mlx->data.l = save;
+}
+
+void	updata_rot_sp(t_mlx *mlx, t_mdata data)
+{
+	t_sphere	*save;
+	double		x[3];
+
+	save = mlx->data.sp;
+	while (mlx->data.sp != NULL)
+	{
+		x[0] = mlx->data.sp->c[0];
+		x[1] = mlx->data.sp->c[1];
+		x[2] = mlx->data.sp->c[2];
+		mlx->data.sp->c[0] = data.rot[0] * x[0] + data.rot[1] * x[1] + data.rot[2] * x[2] - data.m[0];
+		mlx->data.sp->c[1] = data.rot[3] * x[0] + data.rot[4] * x[1] + data.rot[5] * x[2] - data.m[1];
+		mlx->data.sp->c[2] = data.rot[6] * x[0] + data.rot[7] * x[1] + data.rot[8] * x[2] - data.m[2];
+		mlx->data.sp = mlx->data.sp->next;
+	}
+	mlx->data.sp = save;
+}
+
+
+void	updata_rot_cy(t_mlx *mlx, t_mdata data)
+{
+	t_cylinder	*save;
+	double		x[3];
+	double		n[3];
+	int			i;
+
+	save = mlx->data.cy;
+	while (mlx->data.cy != NULL)
+	{
+		i = 0;
+		while (i < 3)
+		{
+			x[i] = mlx->data.cy->c[i];
+			n[i] = mlx->data.cy->n[i];
+			i++;
+		}
+		i = 0;
+		while (i < 3)
+		{
+			mlx->data.cy->c[i] = data.rot[i * 3] * x[0] + data.rot[i * 3 + 1] * x[1] + data.rot[i * 3 + 2] * x[2] - data.m[i];
+			mlx->data.cy->n[i] = data.rot[i * 3] * n[0] + data.rot[i * 3 + 1] * n[1] + data.rot[i * 3 + 2] * n[2];
+			i++;
+		}
+		mlx->data.cy = mlx->data.cy->next;
+	}
+	mlx->data.cy = save;
+}
+
+void	updata_rot_pl(t_mlx *mlx, t_mdata data)
+{
+	t_plane	*save;
+	double	x[3];
+	double	n[3];
+	int		i;
+
+	save = mlx->data.pl;
+	while (mlx->data.pl != NULL)
+	{
+		i = 0;
+		while (i < 3)
+		{
+			x[i] = mlx->data.pl->x[i];
+			n[i] = mlx->data.pl->n[i];
+			i++;
+		}
+		i = 0;
+		while (i < 3)
+		{
+			mlx->data.pl->x[i] = data.rot[i * 3] * x[0] + data.rot[i * 3 + 1] * x[1] + data.rot[i * 3 + 2] * x[2] - data.m[i];
+			mlx->data.pl->n[i] = data.rot[i * 3] * n[0] + data.rot[i * 3 + 1] * n[1] + data.rot[i * 3 + 2] * n[2];
+			i++;
+		}
+		mlx->data.pl = mlx->data.pl->next;
+	}
+	mlx->data.pl = save;
+}
+
+void	updata_rot(t_mlx *mlx, t_mdata data)
+{
+	updata_rot_l(mlx, data);
+	updata_rot_sp(mlx, data);
+	updata_rot_pl(mlx, data);
+	updata_rot_cy(mlx, data);
+}
+
+void	updata_cam_rot(t_mlx *mlx)
+{
+	t_mdata	data;
+
+	data.a = atan(mlx->data.cam->n[2] / mlx->data.cam->n[0]);
+	data.b = atan(mlx->data.cam->n[1] / mlx->data.cam->n[0]);
+	printf("\n\n%f , %f\n\n\n",mlx->data.cam->n[2],mlx->data.cam->n[0]);
+	data.m[0] = mlx->data.cam->x[0];
+	data.m[1] = mlx->data.cam->x[1];
+	data.m[2] = mlx->data.cam->x[2];
+	init_rot_val(&data);
+	updata_rot(mlx, data);
+}
+
 void	check_input(char *argv, t_mlx *mlx)
 {
 	check_filename(argv);
 	push_data(opne_data(argv), mlx);
+	test_a(*mlx);
+	test_c(*mlx);
+	test_l(*mlx);
+	test_cy(*mlx);
+	test_pl(*mlx);
+	test_sp(*mlx);
+	close_non_data(mlx);
+	check_cam_error(mlx);
+	updata_cam_rot(mlx);
 }
 
 void	init_mlx_data(t_mlx *mlx)
 {
+
+	mlx->size[0] = 1600;
+	mlx->size[1] = 900;
+
 	mlx->data.count_l = 0;
 	mlx->data.count_al = 0;
 	mlx->data.count_cam = 0;
@@ -366,160 +546,29 @@ void	init_mlx_data(t_mlx *mlx)
 	mlx->data.sp->next = NULL;
 }
 
-
-void	test_c(t_mlx mlx)
+int	ft_close(t_mlx *mlx)
 {
-	int i;
-	printf("\ntest cam\n");
-	while (mlx.data.cam != NULL)
-	{
-		i = 0;
-		while (i < 3)
-		{
-			printf("x[%d] : %f\n",i,mlx.data.cam->x[i]);
-			i++;
-		}
-		i = 0;
-		while (i < 3)
-		{
-			printf("n[%d] : %f\n",i,mlx.data.cam->n[i]);
-			i++;
-		}
-		printf("FOV : %f\n", mlx.data.cam->fov);
-		mlx.data.cam = mlx.data.cam->next;
-	}
+	mlx_destroy_window(mlx->mlx, mlx->win);
+	exit(0);
+	return (-1);
 }
 
-
-void	test_l(t_mlx mlx)
+int	press_key(int key_code)
 {
-	int i;
-	printf("\ntest light\n");
-	while (mlx.data.l != NULL)
-	{
-		i = 0;
-		while (i < 3)
-		{
-			printf("x[%d] : %f\n",i,mlx.data.l->x[i]);
-			i++;
-		}
-		printf("ratio : %f\n", mlx.data.l->ratio);
-		i = 0;
-		while (i < 3)
-		{
-			printf("rgb[i] : %d\n",mlx.data.l->rgb[i]);
-			i++;
-		}
-		mlx.data.l = mlx.data.l->next;
-	}
+	if (key_code == 53)
+		exit(0);
+	return (1);
 }
 
-void	test_a(t_mlx mlx)
+int	loop_main(t_mlx *mlx)
 {
-	int i;
-	
-	printf("\ntest A\n");
-	while (mlx.data.al != NULL)
-	{
-		printf("ratio : %f\n",mlx.data.al->ratio);
-		i = 0;
-		while (i < 3)
-		{
-			printf("rgb[%d] : %d\n",i,mlx.data.al->rgb[i]);
-			i++;
-		}
-		mlx.data.al = mlx.data.al->next;
-	}
-}
-
-void	test_pl(t_mlx mlx)
-{
-	int i;
-	
-	printf("\ntest pl\n");
-	while (mlx.data.pl != NULL)
-	{
-		i = 0;
-		while (i < 3)
-		{
-			printf("x[%d] : %f\n",i,mlx.data.pl->x[i]);
-			i++;
-		}
-		i = 0;
-		while (i < 3)
-		{
-			printf("n[%d] : %f\n",i,mlx.data.pl->n[i]);
-			i++;
-		}
-		i = 0;
-		while (i < 3)
-		{
-			printf("rgb[%d] : %d\n",i,mlx.data.pl->rgb[i]);
-			i++;
-		}
-		mlx.data.pl = mlx.data.pl->next;
-	}
-}
-
-void	test_sp(t_mlx mlx)
-{
-	int i;
-	
-	printf("\ntest sp\n");
-	while (mlx.data.sp != NULL)
-	{
-		i = 0;
-		while (i < 3)
-		{
-			printf("c[%d] : %f\n",i,mlx.data.sp->c[i]);
-			i++;
-		}
-		printf("r : %f\n", mlx.data.sp->r);
-		i = 0;
-		while (i < 3)
-		{
-			printf("rgb[%d] : %d\n",i,mlx.data.sp->rgb[i]);
-			i++;
-		}
-		mlx.data.sp = mlx.data.sp->next;
-	}
-}
-
-void	test_cy(t_mlx mlx)
-{
-	int i;
-	
-	printf("\ntest cy\n");
-	while (mlx.data.cy != NULL)
-	{
-		i = 0;
-		while (i < 3)
-		{
-			printf("x[%d] : %f\n",i,mlx.data.cy->c[i]);
-			i++;
-		}
-		i = 0;
-		while (i < 3)
-		{
-			printf("n[%d] : %f\n",i,mlx.data.cy->n[i]);
-			i++;
-		}
-		printf("r : %f\n", mlx.data.cy->r);
-		printf("h : %f\n", mlx.data.cy->h);
-		i = 0;
-		while (i < 3)
-		{
-			printf("rgb[%d] : %d\n",i,mlx.data.cy->rgb[i]);
-			i++;
-		}
-		mlx.data.cy = mlx.data.cy->next;
-	}
+	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
+	return (0);
 }
 
 int	main(int argc, char **argv)
 {
 	t_mlx	mlx;
-	int i = 0;
 	if (argc != 2)
 		exit(0);
 	init_mlx_data(&mlx);
@@ -530,5 +579,9 @@ int	main(int argc, char **argv)
 	test_cy(mlx);
 	test_pl(mlx);
 	test_sp(mlx);
-
+	ft_mlx_init(&mlx);
+	mlx_hook(mlx.win, PRESS, 0, &press_key, &mlx);
+	mlx_hook(mlx.win, CLOSED, 0, &ft_close, &mlx);
+	mlx_loop_hook(mlx.mlx, &loop_main, &mlx);
+	mlx_loop(mlx.mlx);
 }

@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 16:12:41 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/16 17:00:15 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/19 17:22:54 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, char **argv)
 		while (argv[i][j] != '\0')
 		{
 			if (argv[i][j] >= 'a' && argv[i][j] <= 'z')
-				std::cout << static_cast<char>(argv[i][j] + 'A' - 'a');
+				std::cout << (char)(argv[i][j] + 'A' - 'a');
 			else
 				std::cout << argv[i][j];
 			j++;
