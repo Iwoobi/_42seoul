@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 18:06:43 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/19 22:18:16 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/21 17:47:01 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,7 @@ typedef struct s_data
 
 typedef struct s_mdata
 {
-	double	rot[9];
-	double	a;
-	double	b;
+	double	*rot;
 	double	m[3];
 }	t_mdata;
 
@@ -114,10 +112,10 @@ typedef struct s_mlx
 {
 	void	*mlx;
 	void	*win;
-	t_mdata	mdata;
 	t_img	img;
 	t_data	data;
 	int		size[2];
+	int		cam_num;
 }	t_mlx;
 
 /*데이터*/
