@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 18:43:50 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/21 21:59:37 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/23 14:01:55 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -397,13 +397,6 @@ void	check_input(char *argv, t_mlx *mlx)
 {
 	check_filename(argv);
 	push_data(opne_data(argv), mlx);
-	test_a(*mlx);
-	test_c(*mlx);
-	test_l(*mlx);
-	test_cy(*mlx);
-	test_pl(*mlx);
-	test_sp(*mlx);
-	printf("\n\n\n\n\n\n\n\n\n");
 	close_non_data(mlx);
 	check_cam_error(mlx);
 }
@@ -453,6 +446,11 @@ int	press_key(int key_code)
 	return (1);
 }
 
+double	inner_product(double *u, double *w)
+{
+	return (u[0] * w[0] + u[1] * w[1] + u[2] * w[2]);
+}
+
 void	cross_product(double *u, double *w, double *result)
 {
 	result[0] = u[1] * w[2] - u[2] * w[1];
@@ -462,32 +460,35 @@ void	cross_product(double *u, double *w, double *result)
 
 double	vector_size(double *x)
 {
+	if (sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]) == 0)
+		return (1);
 	return (sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]));
 }
 
-double	*rot_matrix(double *x, double *y, double *z)
+void	rot_matrix(double *x, double *y, double *z, double *result)
 {
-	static double	result[9];
-
+	// result[0] = x[0] / vector_size(x);
+	// result[1] = y[0] / vector_size(y);
+	// result[2] = z[0] / vector_size(z);
+	// result[3] = x[1] / vector_size(x);
+	// result[4] = y[1] / vector_size(y);
+	// result[5] = z[1] / vector_size(z);
+	// result[6] = x[2] / vector_size(x);
+	// result[7] = y[2] / vector_size(y);
+	// result[8] = z[2] / vector_size(z);
 	result[0] = x[0] / vector_size(x);
-	result[1] = y[0] / vector_size(y);
-	result[2] = z[0] / vector_size(z);
-	result[3] = x[1] / vector_size(x);
+	result[1] = x[1] / vector_size(x);
+	result[2] = x[2] / vector_size(x);
+	result[3] = y[0] / vector_size(y);
 	result[4] = y[1] / vector_size(y);
-	result[5] = z[1] / vector_size(z);
-	result[6] = x[2] / vector_size(x);
-	result[7] = y[2] / vector_size(y);
+	result[5] = y[2] / vector_size(y);
+	result[6] = z[0] / vector_size(z);
+	result[7] = z[1] / vector_size(z);
 	result[8] = z[2] / vector_size(z);
-	printf("\ncross\n%f %f %f\n",result[0], result[1], result[2]);
-	printf("%f %f %f\n",result[3], result[4], result[5]);
-	printf("%f %f %f\n",result[6], result[7], result[8]);
-
-	return (result);
 }
 
-double	*rot_data_push(t_cam cam)
+void	rot_data_push(t_cam cam, t_mdata *data)
 {
-	double	*result;
 	double	x[3];
 	double	y[3];
 	double	z[3];
@@ -497,8 +498,34 @@ double	*rot_data_push(t_cam cam)
 	z[2] = 1;
 	cross_product(cam.n, z, x);
 	cross_product(cam.n, x, y);
-	result = rot_matrix(x, y, cam.n);
-	return (result);
+	rot_matrix(x, y, cam.n, data->rot);
+}
+
+int	rot_data_check(t_cam cam)
+{
+	if (cam.n[0] == 0)
+	{
+		if (cam.n[1] == 0)
+		{
+			if (cam.n[2] != 0)
+				return (-1);
+			print_error("check cam rotate");
+		}
+	}
+	return (0);
+}
+
+void	rot_non_data_push(t_cam cam, t_mdata *data)
+{
+	data->rot[0] = 1;
+	data->rot[1] = 0;
+	data->rot[2] = 0;
+	data->rot[3] = 0;
+	data->rot[4] = 1;
+	data->rot[5] = 0;
+	data->rot[6] = 0;
+	data->rot[7] = 0;
+	data->rot[8] = cam.n[2] / sqrt(cam.n[2] * cam.n[2]);
 }
 
 t_mdata	rot_data_init(t_cam	cam)
@@ -508,7 +535,10 @@ t_mdata	rot_data_init(t_cam	cam)
 	data.m[0] = cam.x[0];
 	data.m[1] = cam.x[1];
 	data.m[2] = cam.x[2];
-	data.rot = rot_data_push(cam);
+	if (rot_data_check(cam) == -1)
+		rot_non_data_push(cam, &data);
+	else
+		rot_data_push(cam, &data);
 	return (data);
 }
 
@@ -544,10 +574,10 @@ void	updata_rot_l(t_data *data, t_mdata mdata)
 	save = data->l;
 	while (data->l != NULL)
 	{
-		data->l->x[0] -= mdata.m[0];
-		data->l->x[1] -= mdata.m[1];
-		data->l->x[2] -= mdata.m[2];
-		trans_rot_data(data->l->x, mdata); 
+		data->l->xc[0] -= mdata.m[0];
+		data->l->xc[1] -= mdata.m[1];
+		data->l->xc[2] -= mdata.m[2];
+		trans_rot_data(data->l->xc, mdata); 
 		data->l = data->l->next;
 	}
 	data->l = save;
@@ -560,10 +590,10 @@ void	updata_rot_sp(t_data *data, t_mdata mdata)
 	save = data->sp;
 	while (data->sp != NULL)
 	{
-		data->sp->c[0] -= mdata.m[0];
-		data->sp->c[1] -= mdata.m[1];
-		data->sp->c[2] -= mdata.m[2];
-		trans_rot_data(data->sp->c, mdata); 
+		data->sp->cc[0] -= mdata.m[0];
+		data->sp->cc[1] -= mdata.m[1];
+		data->sp->cc[2] -= mdata.m[2];
+		trans_rot_data(data->sp->cc, mdata); 
 		data->sp = data->sp->next;
 	}
 	data->sp = save;
@@ -576,11 +606,11 @@ void	updata_rot_pl(t_data *data, t_mdata mdata)
 	save = data->pl;
 	while (data->pl != NULL)
 	{
-		data->pl->x[0] -= mdata.m[0];
-		data->pl->x[1] -= mdata.m[1];
-		data->pl->x[2] -= mdata.m[2];
-		trans_rot_data(data->pl->x, mdata);
-		trans_rot_data(data->pl->n, mdata); 
+		data->pl->xc[0] -= mdata.m[0];
+		data->pl->xc[1] -= mdata.m[1];
+		data->pl->xc[2] -= mdata.m[2];
+		trans_rot_data(data->pl->xc, mdata);
+		trans_rot_data(data->pl->nc, mdata); 
 		data->pl = data->pl->next;
 	}
 	data->pl = save;
@@ -593,37 +623,192 @@ void	updata_rot_cy(t_data *data, t_mdata mdata)
 	save = data->cy;
 	while (data->cy != NULL)
 	{
-		data->cy->c[0] -= mdata.m[0];
-		data->cy->c[1] -= mdata.m[1];
-		data->cy->c[2] -= mdata.m[2];
-		trans_rot_data(data->cy->c, mdata);
-		trans_rot_data(data->cy->n, mdata); 
+		data->cy->cc[0] -= mdata.m[0];
+		data->cy->cc[1] -= mdata.m[1];
+		data->cy->cc[2] -= mdata.m[2];
+		trans_rot_data(data->cy->cc, mdata);
+		trans_rot_data(data->cy->nc, mdata); 
 		data->cy = data->cy->next;
 	}
 	data->cy = save;
 }
 
 
-void	updata_rot(t_data *data, t_mdata mdata)
+void	updata_rot(t_mlx *mlx, t_mdata mdata)
 {
-	updata_rot_l(data, mdata);
-	updata_rot_sp(data, mdata);
-	updata_rot_pl(data, mdata);
-	updata_rot_cy(data, mdata);
+	updata_rot_l(&(mlx->data), mdata);
+	updata_rot_sp(&(mlx->data), mdata);
+	updata_rot_pl(&(mlx->data), mdata);
+	updata_rot_cy(&(mlx->data), mdata);
 }
 
-void	exec_rot_data(t_mlx *mlx, t_data data, t_mdata mdata)
+void	test(t_data mlx)
 {
-	updata_rot(&data, mdata);
-	mlx->data.l = mlx->data.l;
+	test_a(mlx);
+	test_c(mlx);
+	test_l(mlx);
+	test_cy(mlx);
+	test_pl(mlx);
+	test_sp(mlx);
+}
+
+void	copy_rot_l(t_mlx *mlx)
+{
+	t_light	*save;
+
+	save = mlx->data.l;
+	while (mlx->data.l != NULL)
+	{
+		mlx->data.l->xc[0] = mlx->data.l->x[0];
+		mlx->data.l->xc[1] = mlx->data.l->x[1];
+		mlx->data.l->xc[2] = mlx->data.l->x[2];
+		mlx->data.l = mlx->data.l->next;
+	}
+	mlx->data.l = save;
+}
+
+void	copy_rot_sp(t_mlx *mlx)
+{
+	t_sphere	*save;
+
+	save = mlx->data.sp;
+	while (mlx->data.sp != NULL)
+	{
+		mlx->data.sp->cc[0] = mlx->data.sp->c[0];
+		mlx->data.sp->cc[1] = mlx->data.sp->c[1];
+		mlx->data.sp->cc[2] = mlx->data.sp->c[2];
+		mlx->data.sp = mlx->data.sp->next;
+	}
+	mlx->data.sp = save;
+}
+
+void	copy_rot_pl(t_mlx *mlx)
+{
+	t_plane	*save;
+
+	save = mlx->data.pl;
+	while (mlx->data.pl != NULL)
+	{
+		mlx->data.pl->xc[0] = mlx->data.pl->x[0];
+		mlx->data.pl->xc[1] = mlx->data.pl->x[1];
+		mlx->data.pl->xc[2] = mlx->data.pl->x[2];
+		mlx->data.pl->nc[0] = mlx->data.pl->n[0];
+		mlx->data.pl->nc[1] = mlx->data.pl->n[1];
+		mlx->data.pl->nc[2] = mlx->data.pl->n[2];
+		mlx->data.pl = mlx->data.pl->next;
+	}
+	mlx->data.pl = save;
+}
+
+void	copy_rot_cy(t_mlx *mlx)
+{
+	t_cylinder	*save;
+
+	save = mlx->data.cy;
+	while (mlx->data.cy != NULL)
+	{
+		mlx->data.cy->cc[0] = mlx->data.cy->c[0];
+		mlx->data.cy->cc[1] = mlx->data.cy->c[1];
+		mlx->data.cy->cc[2] = mlx->data.cy->c[2];
+		mlx->data.cy->nc[0] = mlx->data.cy->n[0];
+		mlx->data.cy->nc[1] = mlx->data.cy->n[1];
+		mlx->data.cy->nc[2] = mlx->data.cy->n[2];
+		mlx->data.cy = mlx->data.cy->next;
+	}
+	mlx->data.cy = save;
+}
+
+void	copy_rot_data(t_mlx *mlx)
+{
+	copy_rot_l(mlx);
+	copy_rot_sp(mlx);
+	copy_rot_pl(mlx);
+	copy_rot_cy(mlx);
+}
+
+void	ctest(t_data mlx)
+{
+	ctest_cy(mlx);
+	ctest_l(mlx);
+	ctest_pl(mlx);
+	ctest_sp(mlx);
+}
+
+double	pow_2(double a)
+{
+	return (a * a);
+}
+
+int		check_hit_sphere_d(double *d, double *c, double r)
+{
+	if (pow_2(inner_product(d, c)) - pow_2(vector_size(d)) * (pow_2(vector_size(c)) - r * r) > 0)
+		return (1);
+	return (0);
+}
+
+void	check_hit_sphere(t_mlx *mlx, double *d, int i, int j)
+{
+	t_sphere	*save;
+
+	save = mlx->data.sp;
+	while (mlx->data.sp != NULL)
+	{
+		if (check_hit_sphere_d(d, mlx->data.sp->cc, mlx->data.sp->r) == 1)
+			mlx->img.data[j * 1600 + i] = 0xFF0000;
+		else
+			mlx->img.data[j * 1600 + i] = 0xFFFFFF;
+		mlx->data.sp = mlx->data.sp->next;
+	}
+	mlx->data.sp = save;
+}
+
+void	hit_point(t_mlx *mlx, int i, int j)
+{
+	double	d[3];
+
+	d[0] = 2 * i * tan(mlx->data.cam->fov / 2) / 1599 - tan(mlx->data.cam->fov / 2);
+	d[1] = 9*(2 * j * tan(mlx->data.cam->fov / 2) / 899 - tan(mlx->data.cam->fov / 2))/16;
+	d[2] = 1;
+	check_hit_sphere(mlx, d, i, j);
+}
+
+void	canvas_match(t_mlx *mlx)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < 1600)
+	{
+		j = 0;
+		while (j < 900)
+		{
+			hit_point(mlx, i, j);
+			j++;
+		}
+		i++;
+	}
+}
+
+void	exec_rot_data(t_mlx *mlx, t_mdata mdata)
+{
+	updata_rot(mlx, mdata);
 }
 
 int	loop_main(t_mlx *mlx)
 {
+	t_mdata	rot;
+
+	// test(mlx->data);
+	copy_rot_data(mlx);
+	rot = data_cam_num_init(*mlx);
+	// print_rot_data(rot_data);
+	exec_rot_data(mlx, rot);
+	canvas_match(mlx);
+	// ctest(mlx->data);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
 	return (0);
 }
-
 
 
 int	main(int argc, char **argv)
@@ -633,20 +818,9 @@ int	main(int argc, char **argv)
 		exit(0);
 	init_mlx_data(&mlx);
 	check_input(argv[1], &mlx);
-	t_mdata	rot_data;
-
-	rot_data = data_cam_num_init(mlx);
-	print_rot_data(rot_data);
-	exec_rot_data(&mlx, mlx.data, rot_data);
-	test_a(mlx);
-	test_c(mlx);
-	test_l(mlx);
-	test_cy(mlx);
-	test_pl(mlx);
-	test_sp(mlx);
-	// ft_mlx_init(&mlx);
-	// mlx_hook(mlx.win, PRESS, 0, &press_key, &mlx);
-	// mlx_hook(mlx.win, CLOSED, 0, &ft_close, &mlx);
-	// mlx_loop_hook(mlx.mlx, &loop_main, &mlx);
-	// mlx_loop(mlx.mlx);
+	ft_mlx_init(&mlx);
+	mlx_hook(mlx.win, PRESS, 0, &press_key, &mlx);
+	mlx_hook(mlx.win, CLOSED, 0, &ft_close, &mlx);
+	mlx_loop_hook(mlx.mlx, &loop_main, &mlx);
+	mlx_loop(mlx.mlx);
 }

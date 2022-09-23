@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 18:06:43 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/21 17:47:01 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/23 13:16:40 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ typedef struct s_plane
 {
 	double			x[3];
 	double			n[3];
+	double			xc[3];
+	double			nc[3];
 	unsigned char	rgb[3];
 	struct s_plane	*next;
 }	t_plane;
@@ -46,6 +48,7 @@ typedef struct s_plane
 typedef struct s_sphere
 {
 	double			c[3];
+	double			cc[3];
 	double			r;
 	unsigned char	rgb[3];
 	struct s_sphere	*next;
@@ -55,9 +58,11 @@ typedef struct s_sphere
 typedef struct s_cylinder
 {
 	double				c[3];
+	double				cc[3];
 	double				h;
 	double				r;
 	double				n[3];
+	double				nc[3];
 	unsigned char		rgb[3];
 	struct s_cylinder	*next;
 }	t_cylinder;
@@ -73,6 +78,8 @@ typedef	struct s_cam
 {
 	double			x[3];
 	double			n[3];
+	double			xc[3];
+	double			nc[3];
 	double			fov;
 	struct s_cam	*next;
 }	t_cam;
@@ -80,6 +87,7 @@ typedef	struct s_cam
 typedef struct s_light
 {
 	double			x[3];
+	double			xc[3];
 	double			ratio;
 	unsigned char	rgb[3];
 	struct s_light	*next;
@@ -104,7 +112,7 @@ typedef struct s_data
 
 typedef struct s_mdata
 {
-	double	*rot;
+	double	rot[9];
 	double	m[3];
 }	t_mdata;
 
@@ -118,6 +126,13 @@ typedef struct s_mlx
 	int		cam_num;
 }	t_mlx;
 
+typedef struct s_vector
+{
+	double	x;
+	double	y;
+	double	z;
+}	t_vector;
+
 /*데이터*/
 int	ft_strlen(char *str);
 double	ft_char_double(char *str, int *count);
@@ -126,11 +141,16 @@ double	ft_char_double(char *str, int *count);
 void	ft_mlx_init(t_mlx *my_mlx);
 
 /*print*/
-void	test_a(t_mlx mlx);
-void	test_c(t_mlx mlx);
-void	test_l(t_mlx mlx);
-void	test_cy(t_mlx mlx);
-void	test_sp(t_mlx mlx);
-void	test_pl(t_mlx mlx);
+void	test_a(t_data mlx);
+void	test_c(t_data mlx);
+void	test_l(t_data mlx);
+void	test_cy(t_data mlx);
+void	test_sp(t_data mlx);
+void	test_pl(t_data mlx);
+
+void	ctest_l(t_data mlx);
+void	ctest_cy(t_data mlx);
+void	ctest_sp(t_data mlx);
+void	ctest_pl(t_data mlx);
 
 #endif
