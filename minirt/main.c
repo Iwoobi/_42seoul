@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 18:43:50 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/23 14:01:55 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/27 19:01:18 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ int	div_str(char *str, char *div)
 		if (*str == '\0')
 			return (-1);
 	}
+	if (*str != ' ')
+		return (-1);
 	return (1);
 }
 
@@ -132,7 +134,10 @@ void	null_check(char *str)
 	while ((*str >= 9 && *str <= 13) || *str == 32)
 		str++;
 	if (*str != '\0')
+	{
+		printf("error : %s\n", str);
 		print_error("check input data");
+	}
 }
 
 void	push_a(char *str, t_mlx *mlx)
@@ -322,7 +327,7 @@ void	check_obj(char *str, t_mlx *mlx)
 {
 	if (div_str(str, "A") == 1)
 		push_a(str, mlx);
-	else if (div_str(str, "C") == 1)
+	else if (div_str(str, "c") == 1)
 		push_c(str, mlx);
 	else if (div_str(str, "L") == 1)
 		push_l(str, mlx);
@@ -334,7 +339,9 @@ void	check_obj(char *str, t_mlx *mlx)
 		push_cy(str, mlx);
 	else if (*str != '\0')
 	{
+		
 		printf("here\n");
+		printf("\n%s\n", str);
 		print_error("check data");
 	}
 }
@@ -432,13 +439,6 @@ void	init_mlx_data(t_mlx *mlx)
 	mlx->data.sp->next = NULL;
 }
 
-int	ft_close(t_mlx *mlx)
-{
-	mlx_destroy_window(mlx->mlx, mlx->win);
-	exit(0);
-	return (-1);
-}
-
 int	press_key(int key_code)
 {
 	if (key_code == 53)
@@ -460,8 +460,8 @@ void	cross_product(double *u, double *w, double *result)
 
 double	vector_size(double *x)
 {
-	if (sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]) == 0)
-		return (1);
+	// if (sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]) == 0)
+	// 	return (1);
 	return (sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]));
 }
 
@@ -739,37 +739,178 @@ double	pow_2(double a)
 	return (a * a);
 }
 
-int		check_hit_sphere_d(double *d, double *c, double r)
+
+void	uv_axis(double *d, t_mlx *mlx)
 {
-	if (pow_2(inner_product(d, c)) - pow_2(vector_size(d)) * (pow_2(vector_size(c)) - r * r) > 0)
+	double x[3];
+	double size;
+	
+	x[0] = mlx->data.sp->t * d[0] - mlx->data.sp->cc[0];
+	x[1] = mlx->data.sp->t * d[1] - mlx->data.sp->cc[1];
+	x[2] = mlx->data.sp->t * d[2] - mlx->data.sp->cc[2];
+
+	size = vector_size(x);
+	x[0] /= size;
+	x[1] /= size;
+	x[2] /= size;
+	mlx->data.sp->u[0] = atan2(-1 * x[2], x[0]) + M_PI;
+	mlx->data.sp->u[1] = acos(-1 * x[1]);
+}
+
+int	check_hit_sp_d(double *d, double *c, t_mlx *mlx)
+{
+	double	a;
+	double	r;
+
+	r = mlx->data.sp->r;
+	a = pow_2(inner_product(d, c)) - pow_2(vector_size(d)) * (pow_2(vector_size(c)) - r * r);
+	if (a >= 0)
+	{
+		mlx->data.sp->t = (inner_product(d, c) - sqrt(a)) / pow_2(vector_size(d));
+		uv_axis(d, mlx);
 		return (1);
+	}
 	return (0);
 }
 
-void	check_hit_sphere(t_mlx *mlx, double *d, int i, int j)
+int	check_hit_pl_d(double *d, double *x, double *n)
+{
+	double	a;
+
+	if (inner_product(d, n) == 0)
+		return (0);
+	a = inner_product(x, n) / inner_product(d, n);
+	if (a <	0)
+		return (0);
+	return (1);
+}
+
+
+int	check_hit_cy_d(double *d, double *n, double *c, t_mlx *mlx)
+{
+	double	a;
+	double	t[2];
+	double	result1[3];
+	double	result2[3];
+	double	r;
+
+	r = mlx->data.cy-> r;
+	cross_product(c, n, result1);
+	cross_product(d, n, result2);
+	a = pow_2(inner_product(result1, result2))
+	- pow_2(vector_size(result2)) * (pow_2(vector_size(result1)) - r * r);
+	if (a >= 0)
+	{
+		t[0] = (inner_product(result1, result2) - sqrt(a)) /  pow_2(vector_size(result2));
+		t[1] = (inner_product(result1, result2) + sqrt(a)) /  pow_2(vector_size(result2));
+		if (inner_product(c, n) - inner_product(d, n) * t[0] <= mlx->data.cy->h / 2)
+		{
+			if (inner_product(c, n) - inner_product(d, n) * t[0] >= -1 * mlx->data.cy->h / 2)
+				return (1);
+		}
+		if (inner_product(c, n) - inner_product(d, n) * t[1] <= mlx->data.cy->h / 2)
+		{
+			if (inner_product(c, n) - inner_product(d, n) * t[1] >= -1 * mlx->data.cy->h / 2)
+				return (1);
+		}
+		return (0);
+	
+	}
+	return (0);
+}
+
+void	vector_size_one_cy(t_mlx *mlx)
+{
+	double	size;
+
+	size = vector_size(mlx->data.cy->nc);
+	mlx->data.cy->nc[0] /= size;
+	mlx->data.cy->nc[1] /= size;
+	mlx->data.cy->nc[2] /= size;
+}
+
+void	vector_size_one_pl(t_mlx *mlx)
+{
+	double	size;
+
+	size = vector_size(mlx->data.pl->nc);
+	mlx->data.pl->nc[0] /= size;
+	mlx->data.pl->nc[1] /= size;
+	mlx->data.pl->nc[2] /= size;
+}
+
+int	checker_borad(double *uv)
+{
+	int	i;
+	int	j;
+	i = (uv[0] * 6) / (M_PI);
+	j = (uv[1] * 6) / (M_PI);
+	if ((i + j) % 2 == 1)
+		return (0);
+	else
+		return (16*16*16*16 * 255 + 16*16* 255 + 255);
+}
+
+void	check_hit_sp(t_mlx *mlx, double *d, int i, int j)
 {
 	t_sphere	*save;
 
 	save = mlx->data.sp;
 	while (mlx->data.sp != NULL)
 	{
-		if (check_hit_sphere_d(d, mlx->data.sp->cc, mlx->data.sp->r) == 1)
-			mlx->img.data[j * 1600 + i] = 0xFF0000;
-		else
-			mlx->img.data[j * 1600 + i] = 0xFFFFFF;
+		if (check_hit_sp_d(d, mlx->data.sp->cc, mlx) == 1)
+			mlx->img.data[j * 1600 + i] = checker_borad(mlx->data.sp->u);
 		mlx->data.sp = mlx->data.sp->next;
 	}
 	mlx->data.sp = save;
 }
 
+void	check_hit_cy(t_mlx *mlx, double *d, int i, int j)
+{
+	t_cylinder	*save;
+
+	save = mlx->data.cy;
+	while (mlx->data.cy != NULL)
+	{
+		vector_size_one_cy(mlx);
+		if (check_hit_cy_d(d, mlx->data.cy->nc, mlx->data.cy->cc, mlx) == 1)
+			mlx->img.data[j * 1600 + i] = 0xFF0000;
+		mlx->data.cy = mlx->data.cy->next;
+	}
+	mlx->data.cy = save;
+}
+
+void	check_hit_pl(t_mlx *mlx, double *d, int i, int j)
+{
+	t_plane	*save;
+
+	save = mlx->data.pl;
+	while (mlx->data.pl != NULL)
+	{
+		vector_size_one_pl(mlx);
+		if (check_hit_pl_d(d, mlx->data.pl->xc, mlx->data.pl->nc) == 1)
+			mlx->img.data[j * 1600 + i] = 0xFF0000;
+		mlx->data.pl = mlx->data.pl->next;
+	}
+	mlx->data.pl = save;
+}
+
+
 void	hit_point(t_mlx *mlx, int i, int j)
 {
 	double	d[3];
+	double	size;
 
-	d[0] = 2 * i * tan(mlx->data.cam->fov / 2) / 1599 - tan(mlx->data.cam->fov / 2);
-	d[1] = 9*(2 * j * tan(mlx->data.cam->fov / 2) / 899 - tan(mlx->data.cam->fov / 2))/16;
-	d[2] = 1;
-	check_hit_sphere(mlx, d, i, j);
+	d[0] = 2 * (double)i * tan(mlx->data.cam->fov / 2) / 1599 - tan(mlx->data.cam->fov / 2);
+	d[1] = 9 * (2 * (double)j * tan(mlx->data.cam->fov / 2) / 899 - tan(mlx->data.cam->fov / 2))/16;
+	d[2] = 0.1;
+	size = vector_size(d);
+	d[0] = d[0] / size;
+	d[1] = d[1] / size;
+	d[2] = d[2] / size;
+	check_hit_sp(mlx, d, i, j);
+	check_hit_cy(mlx, d, i, j);
+	check_hit_pl(mlx, d, i, j);
 }
 
 void	canvas_match(t_mlx *mlx)
@@ -789,7 +930,12 @@ void	canvas_match(t_mlx *mlx)
 		i++;
 	}
 }
-
+int	ft_close(t_mlx *mlx)
+{
+	mlx_destroy_window(mlx->mlx, mlx->win);
+	exit(0);
+	return (-1);
+}
 void	exec_rot_data(t_mlx *mlx, t_mdata mdata)
 {
 	updata_rot(mlx, mdata);
@@ -800,16 +946,15 @@ int	loop_main(t_mlx *mlx)
 	t_mdata	rot;
 
 	// test(mlx->data);
+		ctest(mlx->data);
 	copy_rot_data(mlx);
 	rot = data_cam_num_init(*mlx);
 	// print_rot_data(rot_data);
 	exec_rot_data(mlx, rot);
 	canvas_match(mlx);
-	// ctest(mlx->data);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img.img, 0, 0);
 	return (0);
 }
-
 
 int	main(int argc, char **argv)
 {

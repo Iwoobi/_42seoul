@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 18:06:43 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/23 13:16:40 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/27 18:00:07 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ typedef struct s_sphere
 {
 	double			c[3];
 	double			cc[3];
+	double			u[2];
+	double			t;
 	double			r;
 	unsigned char	rgb[3];
 	struct s_sphere	*next;
@@ -121,6 +123,7 @@ typedef struct s_mlx
 	void	*mlx;
 	void	*win;
 	t_img	img;
+
 	t_data	data;
 	int		size[2];
 	int		cam_num;
