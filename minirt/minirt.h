@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 18:06:43 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/29 23:24:08 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/30 00:02:35 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@
 # include <stdlib.h>
 # include "./mlx/mlx.h"
 
+typedef enum e_obj
+{
+	PL,
+	CY,
+	SP
+}	t_obj;
+
 typedef struct s_img
 {
 	void	*img;
@@ -41,6 +48,8 @@ typedef struct s_plane
 	double			n[3];
 	double			xc[3];
 	double			nc[3];
+	double			u[2];
+	int				checker;		
 	unsigned char	rgb[3];
 	struct s_plane	*next;
 }	t_plane;
@@ -51,6 +60,7 @@ typedef struct s_sphere
 	double			cc[3];
 	double			u[2];
 	double			r;
+	int				checker;
 	unsigned char	rgb[3];
 	struct s_sphere	*next;
 }	t_sphere;
@@ -62,8 +72,10 @@ typedef struct s_cylinder
 	double				cc[3];
 	double				h;
 	double				r;
+	double				u[2];
 	double				n[3];
 	double				nc[3];
+	int					checker;
 	unsigned char		rgb[3];
 	struct s_cylinder	*next;
 }	t_cylinder;

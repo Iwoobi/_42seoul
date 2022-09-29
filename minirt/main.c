@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 18:43:50 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/29 23:24:42 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/30 00:22:20 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,10 @@ int	div_str(char *str, char *div)
 			return (-1);
 		div++;
 		str++;
-		if (*str == '\0')
-			return (-1);
 	}
-	if (*str != ' ')
-		return (-1);
-	return (1);
+	if (*str == ' ' || *str == '\n' || *str == '\0')
+		return (1);
+	return (-1);
 }
 
 void	push_x_y_z(double *data, char **str)
@@ -109,12 +107,25 @@ void	push_x_y_z(double *data, char **str)
 	}
 }
 
-void	push_rgb(unsigned char *rgb, char **str)
+int	push_rgb(unsigned char *rgb, char **str)
 {
 	int	i;
 	int	count;
 
 	i = 0;
+	count = 0;
+	while ((**str >= 9 && **str <= 13) || **str == 32)
+	{
+		(*str)++;
+		count++;
+	}
+	printf("%s\n", *str);
+	if (div_str(*str, "checker") == 1)
+	{
+		printf("asd\n");
+		*str += 7;
+		return (1);
+	}
 	while (i < 3)
 	{
 		count = 0;
@@ -126,6 +137,7 @@ void	push_rgb(unsigned char *rgb, char **str)
 			(*str)++;
 		i++;
 	}
+	return (0);
 }
 
 void	null_check(char *str)
@@ -254,7 +266,7 @@ void	push_sp(char *str, t_mlx *mlx)
 	push_x_y_z(&(mlx->data.sp->c[0]), &str);
 	mlx->data.sp->r = ft_char_double(str, &count);
 	str += count;
-	push_rgb(&(mlx->data.sp->rgb[0]), &str);
+	mlx->data.sp->checker = push_rgb(&(mlx->data.sp->rgb[0]), &str);
 	null_check(str);
 	mlx->data.sp = save;
 }
@@ -283,7 +295,7 @@ void	push_pl(char *str, t_mlx *mlx)
 	mlx->data.count_pl += 1;
 	push_x_y_z(&(mlx->data.pl->x[0]), &str);
 	push_x_y_z(&(mlx->data.pl->n[0]), &str);
-	push_rgb(&(mlx->data.pl->rgb[0]), &str);
+	mlx->data.pl->checker = push_rgb(&(mlx->data.pl->rgb[0]), &str);
 	null_check(str);
 	mlx->data.pl = save;
 }
@@ -317,7 +329,7 @@ void	push_cy(char *str, t_mlx *mlx)
 	count = 0;
 	mlx->data.cy->h = ft_char_double(str, &count);
 	str += count;
-	push_rgb(&(mlx->data.cy->rgb[0]), &str);
+	mlx->data.cy->checker = push_rgb(&(mlx->data.cy->rgb[0]), &str);
 	null_check(str);
 	mlx->data.cy = save;
 }
@@ -782,7 +794,8 @@ int	check_hit_sp_d(double *d, double *c, t_mlx *mlx)
 			mlx->t = -2;
 			return (0);
 		}
-		uv_axis_sp(d, mlx);
+		if (mlx->data.sp->checker == 1)
+			uv_axis_sp(d, mlx);
 		return (1);
 	}
 	return (0);
@@ -879,6 +892,40 @@ void	normal_vector_sp(t_mlx *mlx, double	*d, int i, int j)
 	mlx->ray[i][j].n[2] = x[2] / mlx->data.sp->cc[2];
 }
 
+int	color_val(t_mlx *mlx, t_obj obj)
+{
+	if (obj == PL)
+		return (pow_2(256) * mlx->data.pl->rgb[0]
+		+ 256 * mlx->data.pl->rgb[1] + mlx->data.pl->rgb[0]);
+	else if (obj == CY)
+		return (pow_2(256) * mlx->data.cy->rgb[0]
+		+ 256 * mlx->data.cy->rgb[1] + mlx->data.cy->rgb[0]);
+	else if (obj == SP)
+		return (pow_2(256) * mlx->data.sp->rgb[0]
+		+ 256 * mlx->data.sp->rgb[1] + mlx->data.sp->rgb[0]);
+	return (-1);
+}
+
+int	color_select(t_mlx *mlx, t_obj obj)
+{
+	if (obj == PL)
+	{
+		if (mlx->data.pl->checker == 1)
+			return (checker_borad(mlx->data.pl->u));
+	}
+	else if (obj == CY)
+	{
+		if (mlx->data.cy->checker == 1)
+			return (checker_borad(mlx->data.cy->u));
+	}
+	else if (obj == SP)
+	{
+		if (mlx->data.sp->checker == 1)
+			return (checker_borad(mlx->data.sp->u));
+	}
+	return (color_val(mlx, obj));
+}
+
 void	check_hit_sp(t_mlx *mlx, double *d, int i, int j)
 {
 	t_sphere	*save;
@@ -890,8 +937,8 @@ void	check_hit_sp(t_mlx *mlx, double *d, int i, int j)
 		{
 			if (mlx->ray[i][j].deep < mlx->t)
 			{
-				mlx->img.data[1600 * j + i] = checker_borad(mlx->data.sp->u);
 				mlx->ray[i][j].deep = mlx->t;
+				mlx->img.data[1600 * j + i] = color_select(mlx, SP);
 				normal_vector_sp(mlx, d, i, j);
 			}
 		}
