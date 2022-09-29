@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 16:12:41 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/19 17:22:54 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/28 22:42:16 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int argc, char **argv)
 		return 0;
 	}
 	i = 1;
-	while (argv[i] != nullptr)
+	while (argv[i])
 	{
 		j = 0;
 		while (argv[i][j] != '\0')
