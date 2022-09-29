@@ -6,12 +6,11 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 18:43:50 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/27 19:01:18 by youhan           ###   ########.fr       */
+/*   Updated: 2022/09/29 23:24:42 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
 
 void	print_rot_data(t_mdata data)
 {
@@ -410,7 +409,7 @@ void	check_input(char *argv, t_mlx *mlx)
 
 void	init_mlx_data(t_mlx *mlx)
 {
-
+	int	i;
 	mlx->size[0] = 1600;
 	mlx->size[1] = 900;
 
@@ -421,6 +420,17 @@ void	init_mlx_data(t_mlx *mlx)
 	mlx->data.count_sp = 0;
 	mlx->data.count_pl = 0;
 	mlx->data.count_cy = 0;
+	mlx->ray = (t_ray **)malloc(sizeof(t_ray *) * 1600);
+	if (mlx->ray == NULL)
+		print_error("malloc error");
+	i = 0;
+	while (i < 1600)
+	{
+		mlx->ray[i] = malloc(sizeof(t_ray) * 900);
+		if (mlx->ray[i] == NULL)
+			print_error("malloc error");
+		i++;
+	}
 	mlx->data.al = (t_alight *)malloc(sizeof(t_alight) * 1);
 	mlx->data.cam = (t_cam *)malloc(sizeof(t_cam) * 1);
 	mlx->data.l = (t_light *)malloc(sizeof(t_light) * 1);
@@ -740,14 +750,14 @@ double	pow_2(double a)
 }
 
 
-void	uv_axis(double *d, t_mlx *mlx)
+void	uv_axis_sp(double *d, t_mlx *mlx)
 {
 	double x[3];
 	double size;
 	
-	x[0] = mlx->data.sp->t * d[0] - mlx->data.sp->cc[0];
-	x[1] = mlx->data.sp->t * d[1] - mlx->data.sp->cc[1];
-	x[2] = mlx->data.sp->t * d[2] - mlx->data.sp->cc[2];
+	x[0] = mlx->t * d[0] - mlx->data.sp->cc[0];
+	x[1] = mlx->t * d[1] - mlx->data.sp->cc[1];
+	x[2] = mlx->t * d[2] - mlx->data.sp->cc[2];
 
 	size = vector_size(x);
 	x[0] /= size;
@@ -766,22 +776,31 @@ int	check_hit_sp_d(double *d, double *c, t_mlx *mlx)
 	a = pow_2(inner_product(d, c)) - pow_2(vector_size(d)) * (pow_2(vector_size(c)) - r * r);
 	if (a >= 0)
 	{
-		mlx->data.sp->t = (inner_product(d, c) - sqrt(a)) / pow_2(vector_size(d));
-		uv_axis(d, mlx);
+		mlx->t = (inner_product(d, c) - sqrt(a)) / pow_2(vector_size(d));
+		if (mlx->t < 0)
+		{
+			mlx->t = -2;
+			return (0);
+		}
+		uv_axis_sp(d, mlx);
 		return (1);
 	}
 	return (0);
 }
 
-int	check_hit_pl_d(double *d, double *x, double *n)
+int	check_hit_pl_d(double *d, double *x, double *n, t_mlx *mlx)
 {
-	double	a;
-
 	if (inner_product(d, n) == 0)
+	{
+		mlx->t = -2;
 		return (0);
-	a = inner_product(x, n) / inner_product(d, n);
-	if (a <	0)
+	}
+	mlx->t = inner_product(x, n) / inner_product(d, n);
+	if (mlx->t < 0)
+	{
+		mlx->t = -2;
 		return (0);
+	}
 	return (1);
 }
 
@@ -789,7 +808,6 @@ int	check_hit_pl_d(double *d, double *x, double *n)
 int	check_hit_cy_d(double *d, double *n, double *c, t_mlx *mlx)
 {
 	double	a;
-	double	t[2];
 	double	result1[3];
 	double	result2[3];
 	double	r;
@@ -801,21 +819,16 @@ int	check_hit_cy_d(double *d, double *n, double *c, t_mlx *mlx)
 	- pow_2(vector_size(result2)) * (pow_2(vector_size(result1)) - r * r);
 	if (a >= 0)
 	{
-		t[0] = (inner_product(result1, result2) - sqrt(a)) /  pow_2(vector_size(result2));
-		t[1] = (inner_product(result1, result2) + sqrt(a)) /  pow_2(vector_size(result2));
-		if (inner_product(c, n) - inner_product(d, n) * t[0] <= mlx->data.cy->h / 2)
+		mlx->t = (inner_product(result1, result2) - sqrt(a)) / pow_2(vector_size(result2));
+		if (inner_product(c, n) - inner_product(d, n) * mlx->t <= mlx->data.cy->h)
 		{
-			if (inner_product(c, n) - inner_product(d, n) * t[0] >= -1 * mlx->data.cy->h / 2)
+			if (inner_product(c, n) - inner_product(d, n) * mlx->t >= 0)
 				return (1);
 		}
-		if (inner_product(c, n) - inner_product(d, n) * t[1] <= mlx->data.cy->h / 2)
-		{
-			if (inner_product(c, n) - inner_product(d, n) * t[1] >= -1 * mlx->data.cy->h / 2)
-				return (1);
-		}
+		mlx->t = -2;
 		return (0);
-	
 	}
+	mlx->t = -2;
 	return (0);
 }
 
@@ -843,12 +856,27 @@ int	checker_borad(double *uv)
 {
 	int	i;
 	int	j;
+
 	i = (uv[0] * 6) / (M_PI);
 	j = (uv[1] * 6) / (M_PI);
 	if ((i + j) % 2 == 1)
 		return (0);
 	else
 		return (16*16*16*16 * 255 + 16*16* 255 + 255);
+}
+
+void	normal_vector_sp(t_mlx *mlx, double	*d, int i, int j)
+{
+	double	x[3];
+	double	size;
+	
+	x[0] = d[0] * mlx->t - mlx->data.sp->cc[0];
+	x[1] = d[1] * mlx->t - mlx->data.sp->cc[1];
+	x[2] = d[2] * mlx->t - mlx->data.sp->cc[2];
+	size = vector_size(x);
+	mlx->ray[i][j].n[0] = x[0] / mlx->data.sp->cc[0];
+	mlx->ray[i][j].n[1] = x[1] / mlx->data.sp->cc[1];
+	mlx->ray[i][j].n[2] = x[2] / mlx->data.sp->cc[2];
 }
 
 void	check_hit_sp(t_mlx *mlx, double *d, int i, int j)
@@ -859,12 +887,32 @@ void	check_hit_sp(t_mlx *mlx, double *d, int i, int j)
 	while (mlx->data.sp != NULL)
 	{
 		if (check_hit_sp_d(d, mlx->data.sp->cc, mlx) == 1)
-			mlx->img.data[j * 1600 + i] = checker_borad(mlx->data.sp->u);
+		{
+			if (mlx->ray[i][j].deep < mlx->t)
+			{
+				mlx->img.data[1600 * j + i] = checker_borad(mlx->data.sp->u);
+				mlx->ray[i][j].deep = mlx->t;
+				normal_vector_sp(mlx, d, i, j);
+			}
+		}
 		mlx->data.sp = mlx->data.sp->next;
 	}
 	mlx->data.sp = save;
 }
 
+void	normal_vector_cy(t_mlx *mlx, double	*d, int i, int j)
+{
+	double	x[3];
+	
+	x[0] = d[0] * mlx->t - mlx->data.cy->cc[0];
+	x[1] = d[1] * mlx->t - mlx->data.cy->cc[1];
+	x[2] = d[2] * mlx->t - mlx->data.cy->cc[2];
+	inner_product(x, mlx->data.cy->nc);
+
+	mlx->ray[i][j].n[0] = x[0] / mlx->data.cy->cc[0];
+	mlx->ray[i][j].n[1] = x[1] / mlx->data.cy->cc[1];
+	mlx->ray[i][j].n[2] = x[2] / mlx->data.cy->cc[2];
+}
 void	check_hit_cy(t_mlx *mlx, double *d, int i, int j)
 {
 	t_cylinder	*save;
@@ -874,7 +922,13 @@ void	check_hit_cy(t_mlx *mlx, double *d, int i, int j)
 	{
 		vector_size_one_cy(mlx);
 		if (check_hit_cy_d(d, mlx->data.cy->nc, mlx->data.cy->cc, mlx) == 1)
-			mlx->img.data[j * 1600 + i] = 0xFF0000;
+		{
+			if (mlx->ray[i][j].deep > mlx->t)
+			{
+				mlx->ray[i][j].deep = mlx->t;
+				normal_vector_cy(mlx, d, i, j);
+			}
+		}
 		mlx->data.cy = mlx->data.cy->next;
 	}
 	mlx->data.cy = save;
@@ -888,7 +942,7 @@ void	check_hit_pl(t_mlx *mlx, double *d, int i, int j)
 	while (mlx->data.pl != NULL)
 	{
 		vector_size_one_pl(mlx);
-		if (check_hit_pl_d(d, mlx->data.pl->xc, mlx->data.pl->nc) == 1)
+		if (check_hit_pl_d(d, mlx->data.pl->xc, mlx->data.pl->nc, mlx) == 1)
 			mlx->img.data[j * 1600 + i] = 0xFF0000;
 		mlx->data.pl = mlx->data.pl->next;
 	}
@@ -924,6 +978,7 @@ void	canvas_match(t_mlx *mlx)
 		j = 0;
 		while (j < 900)
 		{
+			mlx->ray[i][j].deep = -3;
 			hit_point(mlx, i, j);
 			j++;
 		}
@@ -959,6 +1014,7 @@ int	loop_main(t_mlx *mlx)
 int	main(int argc, char **argv)
 {
 	t_mlx	mlx;
+
 	if (argc != 2)
 		exit(0);
 	init_mlx_data(&mlx);

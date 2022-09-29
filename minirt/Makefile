@@ -6,11 +6,11 @@
 #    By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/19 17:58:34 by youhan            #+#    #+#              #
-#    Updated: 2022/09/19 22:18:56 by youhan           ###   ########.fr        #
+#    Updated: 2022/09/29 23:17:36 by youhan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc
+CC = gcc -g
 NAME = a.out
 CFLAGS = -Wall -Werror -Wextra
 CFLAG = -Lmlx -lmlx -framework OpenGL -framework AppKit
