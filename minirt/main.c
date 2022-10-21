@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 18:43:50 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/30 00:22:20 by youhan           ###   ########.fr       */
+/*   Updated: 2022/10/21 21:44:54 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,8 @@ int	push_rgb(unsigned char *rgb, char **str)
 		(*str)++;
 		count++;
 	}
-	printf("%s\n", *str);
 	if (div_str(*str, "checker") == 1)
 	{
-		printf("asd\n");
 		*str += 7;
 		return (1);
 	}
@@ -174,7 +172,6 @@ void	push_a(char *str, t_mlx *mlx)
 	count = 0;
 	mlx->data.count_al += 1;
 	mlx->data.al->ratio = ft_char_double(str, &count);
-	mlx->data.al->next = NULL;
 	str += count;
 	push_rgb(&(mlx->data.al->rgb[0]), &str);
 	null_check(str);
@@ -350,7 +347,6 @@ void	check_obj(char *str, t_mlx *mlx)
 		push_cy(str, mlx);
 	else if (*str != '\0')
 	{
-		
 		printf("here\n");
 		printf("\n%s\n", str);
 		print_error("check data");
@@ -487,7 +483,7 @@ double	vector_size(double *x)
 	return (sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]));
 }
 
-void	rot_matrix(double *x, double *y, double *z, double *result)
+void	 rot_matrix(double *x, double *y, double *z, double *result)
 {
 	// result[0] = x[0] / vector_size(x);
 	// result[1] = y[0] / vector_size(y);
@@ -833,9 +829,9 @@ int	check_hit_cy_d(double *d, double *n, double *c, t_mlx *mlx)
 	if (a >= 0)
 	{
 		mlx->t = (inner_product(result1, result2) - sqrt(a)) / pow_2(vector_size(result2));
-		if (inner_product(c, n) - inner_product(d, n) * mlx->t <= mlx->data.cy->h)
+		if (inner_product(d, n) * mlx->t - inner_product(c, n) <= mlx->data.cy->h)
 		{
-			if (inner_product(c, n) - inner_product(d, n) * mlx->t >= 0)
+			if (inner_product(d, n) * mlx->t - inner_product(c, n) >= 0)
 				return (1);
 		}
 		mlx->t = -2;
@@ -896,13 +892,13 @@ int	color_val(t_mlx *mlx, t_obj obj)
 {
 	if (obj == PL)
 		return (pow_2(256) * mlx->data.pl->rgb[0]
-		+ 256 * mlx->data.pl->rgb[1] + mlx->data.pl->rgb[0]);
+		+ 256 * mlx->data.pl->rgb[1] + mlx->data.pl->rgb[2]);
 	else if (obj == CY)
 		return (pow_2(256) * mlx->data.cy->rgb[0]
-		+ 256 * mlx->data.cy->rgb[1] + mlx->data.cy->rgb[0]);
+		+ 256 * mlx->data.cy->rgb[1] + mlx->data.cy->rgb[2]);
 	else if (obj == SP)
 		return (pow_2(256) * mlx->data.sp->rgb[0]
-		+ 256 * mlx->data.sp->rgb[1] + mlx->data.sp->rgb[0]);
+		+ 256 * mlx->data.sp->rgb[1] + mlx->data.sp->rgb[2]);
 	return (-1);
 }
 
@@ -935,7 +931,7 @@ void	check_hit_sp(t_mlx *mlx, double *d, int i, int j)
 	{
 		if (check_hit_sp_d(d, mlx->data.sp->cc, mlx) == 1)
 		{
-			if (mlx->ray[i][j].deep < mlx->t)
+			if (mlx->ray[i][j].deep > mlx->t || mlx->ray[i][j].deep < 0)
 			{
 				mlx->ray[i][j].deep = mlx->t;
 				mlx->img.data[1600 * j + i] = color_select(mlx, SP);
@@ -970,9 +966,10 @@ void	check_hit_cy(t_mlx *mlx, double *d, int i, int j)
 		vector_size_one_cy(mlx);
 		if (check_hit_cy_d(d, mlx->data.cy->nc, mlx->data.cy->cc, mlx) == 1)
 		{
-			if (mlx->ray[i][j].deep > mlx->t)
+			if (mlx->ray[i][j].deep > mlx->t || mlx->ray[i][j].deep < 0)
 			{
 				mlx->ray[i][j].deep = mlx->t;
+				mlx->img.data[1600 * j + i] = color_select(mlx, CY);
 				normal_vector_cy(mlx, d, i, j);
 			}
 		}

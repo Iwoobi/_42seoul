@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 18:06:43 by youhan            #+#    #+#             */
-/*   Updated: 2022/09/30 00:02:35 by youhan           ###   ########.fr       */
+/*   Updated: 2022/10/21 17:27:33 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_plane
 	double			xc[3];
 	double			nc[3];
 	double			u[2];
-	int				checker;		
+	int				checker;
 	unsigned char	rgb[3];
 	struct s_plane	*next;
 }	t_plane;
