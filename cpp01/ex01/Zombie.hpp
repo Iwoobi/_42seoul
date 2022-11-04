@@ -1,40 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   megaphone.cpp                                      :+:      :+:    :+:   */
+/*   Zombie.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/16 16:12:41 by youhan            #+#    #+#             */
-/*   Updated: 2022/11/03 20:03:50 by youhan           ###   ########.fr       */
+/*   Created: 2022/11/04 18:57:45 by youhan            #+#    #+#             */
+/*   Updated: 2022/11/04 18:57:46 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 
-int	main(int argc, char **argv)
+class Zombie
 {
-	int	i;
-	int	j;
-
-	if (argc == 1)
-	{
-		std::cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *" << std::endl;
-		return 0;
-	}
-	i = 1;
-	while (argv[i])
-	{
-		j = 0;
-		while (argv[i][j] != '\0')
-		{
-			if (argv[i][j] >= 'a' && argv[i][j] <= 'z')
-				std::cout << (char)(argv[i][j] + 'A' - 'a');
-			else
-				std::cout << argv[i][j];
-			j++;
-		}
-		i++;
-	}
-	std::cout << std::endl;
-}
+	private:
+	std::string	name;
+	public:
+	~Zombie();
+	Zombie(std::string name);
+	void	announce(void);
+};

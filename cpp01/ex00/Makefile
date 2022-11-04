@@ -5,15 +5,15 @@
 #                                                     +:+ +:+         +:+      #
 #    By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/09/28 22:00:01 by youhan            #+#    #+#              #
-#    Updated: 2022/11/03 21:11:34 by youhan           ###   ########.fr        #
+#    Created: 2022/11/04 18:41:14 by youhan            #+#    #+#              #
+#    Updated: 2022/11/04 18:41:44 by youhan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = my_phone
+NAME = Zombie
 CC = c++
 CFLAG = -Wall -Werror -Wextra -std=c++98
-SRCS =	main.cpp PhoneBook.cpp
+SRCS =	main.cpp newZombie.cpp randomChump.cpp Zombie.cpp
 OBJS = ${SRCS:.cpp=.o}
 
 .o : .c

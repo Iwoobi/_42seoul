@@ -1,48 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   PhoneBook.hpp                                      :+:      :+:    :+:   */
+/*   Zombie.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/30 00:54:01 by youhan            #+#    #+#             */
-/*   Updated: 2022/11/03 21:06:47 by youhan           ###   ########.fr       */
+/*   Created: 2022/11/04 18:13:47 by youhan            #+#    #+#             */
+/*   Updated: 2022/11/04 18:49:18 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHONEBOOK_H
-# define PHONEBOOK_H
-
 #include <iostream>
 
-class PhoneBook
+class Zombie
 {
 	private:
-	class Node
-	{
-		public:
-		int			status;
-		std::string	firstname;
-		std::string	lastname;
-		std::string	nickname;
-		std::string	phonenum;
-		std::string	darkestsecret;
-	};
-	
-	int	check_count();
-	int	count;
-	Node member[8];
-	void	printf(int index);
-	void	data_init();
-	void	printf_char(std::string str);
-
+	std::string	name;
 	public:
-	void	countprint();
-	PhoneBook();
-	void	add();
-	void	search();
-	void	exit();
+	~Zombie();
+	Zombie(std::string name);
+	void	announce(void);
 };
 
-#endif
+Zombie	*newZombie(std::string name);
+void 	randomChump(std::string name);
 

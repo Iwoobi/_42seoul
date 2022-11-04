@@ -5,15 +5,15 @@
 #                                                     +:+ +:+         +:+      #
 #    By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/09/28 22:00:01 by youhan            #+#    #+#              #
-#    Updated: 2022/11/03 21:11:34 by youhan           ###   ########.fr        #
+#    Created: 2022/11/04 20:44:08 by youhan            #+#    #+#              #
+#    Updated: 2022/11/04 20:44:26 by youhan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = my_phone
+NAME = test
 CC = c++
 CFLAG = -Wall -Werror -Wextra -std=c++98
-SRCS =	main.cpp PhoneBook.cpp
+SRCS =	test.cpp Account.cpp
 OBJS = ${SRCS:.cpp=.o}
 
 .o : .c
