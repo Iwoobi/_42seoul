@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Zombie.hpp                                         :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/04 18:57:45 by youhan            #+#    #+#             */
-/*   Updated: 2022/11/14 17:39:14 by youhan           ###   ########.fr       */
+/*   Created: 2022/11/14 21:33:11 by youhan            #+#    #+#             */
+/*   Updated: 2022/11/14 22:03:18 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 
-class Zombie
+int	main()
 {
-	private:
-	std::string	name;
-	public:
-	Zombie();
-	~Zombie();
-	Zombie(std::string name);
-	void	announce(void);
-	void	init_info(std::string name);
-};
+	std::string	str = "HI THIS IS BRAIN";
+	std::string	*stringPTR = &str;
+	std::string	&stringREF = str;
 
-Zombie* zombieHorde(int N, std::string name);
+	std::cout << &str << std::endl;
+	std::cout << &stringPTR << std::endl;
+	std::cout << &stringREF << std::endl;
+
+	std::cout << str << std::endl;
+	std::cout << stringPTR << std::endl;
+	std::cout << stringREF << std::endl;
+}

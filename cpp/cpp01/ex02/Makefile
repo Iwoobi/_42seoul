@@ -5,15 +5,15 @@
 #                                                     +:+ +:+         +:+      #
 #    By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/11/04 18:57:21 by youhan            #+#    #+#              #
-#    Updated: 2022/11/14 21:31:15 by youhan           ###   ########.fr        #
+#    Created: 2022/11/14 21:32:13 by youhan            #+#    #+#              #
+#    Updated: 2022/11/14 21:46:52 by youhan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = Zombie
+NAME = ex02
 CC = c++
 CFLAG = -Wall -Werror -Wextra -std=c++98
-SRCS =	main.cpp Zombie.cpp zombieHorde.cpp
+SRCS = main.cpp
 OBJS = ${SRCS:.cpp=.o}
 
 .o : .c
