@@ -6,17 +6,17 @@
 #    By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/14 22:09:30 by youhan            #+#    #+#              #
-#    Updated: 2022/11/14 22:09:59 by youhan           ###   ########.fr        #
+#    Updated: 2022/11/15 21:28:36 by youhan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = Zombie
+NAME = ex03
 CC = c++
 CFLAG = -Wall -Werror -Wextra -std=c++98
 SRCS =	main.cpp HumanA.cpp HumanB.cpp Weapon.cpp
 OBJS = ${SRCS:.cpp=.o}
 
-.o : .c
+.o : .cpp
 	${CC} ${CFLAGS} -c $< -o $@
 	
 ${NAME} : ${OBJS} ${MLX}

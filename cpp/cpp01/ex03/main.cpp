@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HumanA.hpp                                         :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/15 18:11:59 by youhan            #+#    #+#             */
-/*   Updated: 2022/11/15 21:49:44 by youhan           ###   ########.fr       */
+/*   Created: 2022/11/15 21:17:16 by youhan            #+#    #+#             */
+/*   Updated: 2022/11/15 21:45:29 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HUMANA_H
-# define HUMANA_H
+#include "HumanA.hpp"
+#include "HumanB.hpp"
 
-#include "Weapon.hpp"
-
-class	HumanA
+int main()
 {
-	private:
-	std::string	name;
-	Weapon		&weapon;
-	public:
-	HumanA(std::string name, Weapon &w);
-	void	attack();
-};
-
-#endif
+  {
+    Weapon club = Weapon("crude spiked club");
+    HumanA bob("Bob", club);
+    bob.attack();
+    club.setType("some other type of club");
+    bob.attack();
+  }
+  {
+    Weapon club = Weapon("crude spiked club");
+    HumanB jim("Jim");
+    jim.setWeapon(club);
+    jim.attack();
+    club.setType("some other type of club");
+    jim.attack();
+  }
+}

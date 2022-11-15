@@ -1,7 +1,7 @@
 
 #include "PhoneBook.hpp"
 #include <iomanip>
-
+#include <sstream>
 void	PhoneBook::printf_char(std::string str)
 {
 	if (str.length() >= 10)
@@ -97,6 +97,8 @@ void	PhoneBook::add()
 void	PhoneBook::search()
 {
 	int	index;
+	std::stringstream	buf;
+	std::string			num;
 	if (this->count == 0)
 	{
 		std::cout << "Contact is blank" << std::endl;
@@ -112,13 +114,31 @@ void	PhoneBook::search()
 	std::cout << "nickname" << std::endl;
 	for(int i = 0; i < this->count; i++)
 		this->printf(i);
-	std::cin >>	index;
-	if (index > this->count)
+	std::cin >>	num;
+	buf << num;
+	buf >> index;
+	if (index > this->count || index == 0)
 	{
 		std::cout << "check index" << std::endl;
 		return ;
 	}
-	
+		std::string	firstname;
+		std::string	lastname;
+		std::string	nickname;
+		std::string	phonenum;
+		std::string	darkestsecret;
+	std::cout << std::setw(16);
+	std::cout << "firstname : ";
+	std::cout << this->member[index - 1].firstname << std::endl;
+	std::cout << std::setw(16);
+	std::cout << "lastname : ";
+	std::cout << this->member[index - 1].lastname << std::endl;
+	std::cout << std::setw(16);
+	std::cout << "nickname : ";
+	std::cout << this->member[index - 1].nickname << std::endl;
+	std::cout << std::setw(16);
+	std::cout << "darkestsecret : ";
+	std::cout << this->member[index - 1].darkestsecret << std::endl;
 }
 
 void	PhoneBook::exit()
