@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 22:06:38 by youhan            #+#    #+#             */
-/*   Updated: 2022/11/22 21:01:54 by youhan           ###   ########.fr       */
+/*   Updated: 2022/11/22 21:04:58 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,4 @@ void Harl::complain( std::string level )
 			std::cout << "[ Probably complaining about insignificant problems ]" << std::endl;
 		break;
 	}
-
 }
