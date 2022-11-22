@@ -6,14 +6,13 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 22:12:10 by youhan            #+#    #+#             */
-/*   Updated: 2022/11/21 21:57:55 by youhan           ###   ########.fr       */
+/*   Updated: 2022/11/22 19:18:33 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <sstream>
 #include <fstream>
-
 #include <string>
 
 void	ft_replace(std::string &buf, size_t found, size_t len, std::string replace)

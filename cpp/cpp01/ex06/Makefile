@@ -6,11 +6,11 @@
 #    By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/21 22:05:33 by youhan            #+#    #+#              #
-#    Updated: 2022/11/22 19:28:38 by youhan           ###   ########.fr        #
+#    Updated: 2022/11/22 20:48:33 by youhan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ex05
+NAME = ex06
 CC = c++
 CFLAG = -Wall -Werror -Wextra -std=c++98
 SRCS =	main.cpp Harl.cpp

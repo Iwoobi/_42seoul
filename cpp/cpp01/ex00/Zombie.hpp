@@ -6,10 +6,12 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 18:13:47 by youhan            #+#    #+#             */
-/*   Updated: 2022/11/04 18:49:18 by youhan           ###   ########.fr       */
+/*   Updated: 2022/11/21 22:07:26 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef ZOMBIE_H
+# define ZOMBIE_H
 #include <iostream>
 
 class Zombie
@@ -24,4 +26,6 @@ class Zombie
 
 Zombie	*newZombie(std::string name);
 void 	randomChump(std::string name);
+
+#endif
 
