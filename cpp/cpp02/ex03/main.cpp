@@ -6,28 +6,20 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 21:05:58 by youhan            #+#    #+#             */
-/*   Updated: 2022/11/24 18:16:44 by youhan           ###   ########.fr       */
+/*   Updated: 2022/11/24 22:43:05 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Fixed.hpp"
+#include "Point.hpp"
 #include <iostream>
 int main( void ) {
-  Fixed a;
-  Fixed const b( 10 );
-  Fixed const c( 42.42f );
-  Fixed const d( b );
+  Point a;
+  Point b(-1, 0);
+  Point c(0, 2);
+  Point d(1, 1);
 
-  a = Fixed( 1234.4321f );
+  std::cout << bsp(a,b,c,d) << std::endl;
 
-  std::cout << "a is " << a << std::endl;
-  std::cout << "b is " << b << std::endl;
-  std::cout << "c is " << c << std::endl;
-  std::cout << "d is " << d << std::endl;
-
-  std::cout << "a is " << a.toInt() << " as integer" << std::endl;
-  std::cout << "b is " << b.toInt() << " as integer" << std::endl;
-  std::cout << "c is " << c.toInt() << " as integer" << std::endl;
-  std::cout << "d is " << d.toInt() << " as integer" << std::endl;
+  system("leaks ex03");
   return 0;
 }

@@ -1,5 +1,5 @@
 #include "Fixed.hpp"
-
+#include <cmath>
 Fixed::Fixed()
 {
 	std::cout << "Default constructor called" << std::endl;
@@ -41,22 +41,30 @@ void Fixed::setRawBits( int const raw )
 	this->a = raw;
 }
 
-Fixed::Fixed(const int)
+Fixed::Fixed(const int val)
 {
-
+	this->a = val * 256;
 }
 
-Fixed::Fixed(const float)
+Fixed::Fixed(const float val)
 {
-
+	this->a = roundf(val * 256);
 }
 
 float Fixed::toFloat( void ) const
 {
-
+	float result;
+	result = (float)this->a / 256;
+	return (result);
 }
 
 int Fixed::toInt( void ) const
 {
+	return (this->a/256);
+}
 
+std::ostream& operator<<(std::ostream& os, const Fixed& val)
+{
+	os << val.toFloat();
+	return (os);
 }

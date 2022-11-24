@@ -61,6 +61,12 @@
 		"unordered_map": "cpp",
 		"utility": "cpp",
 		"vector": "cpp",
-		"weapon.hpp": "c"
+		"weapon.hpp": "c",
+		"deque": "cpp",
+		"fstream": "cpp",
+		"stack": "cpp",
+		"__functional_03": "cpp",
+		"memory_resource": "cpp",
+		"filesystem": "cpp"
 	}
 }
