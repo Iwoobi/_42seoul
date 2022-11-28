@@ -6,11 +6,11 @@
 #    By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/04 20:44:08 by youhan            #+#    #+#              #
-#    Updated: 2022/11/04 20:44:26 by youhan           ###   ########.fr        #
+#    Updated: 2022/11/25 23:19:28 by youhan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = test
+NAME = ex02
 CC = c++
 CFLAG = -Wall -Werror -Wextra -std=c++98
 SRCS =	test.cpp Account.cpp

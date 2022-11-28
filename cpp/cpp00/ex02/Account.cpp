@@ -6,13 +6,13 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 20:04:35 by youhan            #+#    #+#             */
-/*   Updated: 2022/11/09 18:34:33 by youhan           ###   ########.fr       */
+/*   Updated: 2022/11/26 02:58:13 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Account.hpp"
 #include <iostream>
-#include <chrono>
+#include <time.h>
 #include <iomanip>
 
 int Account::_nbAccounts = 0;
@@ -22,9 +22,18 @@ int Account::_totalNbWithdrawals = 0;
 
 void	Account::_displayTimestamp( void )
 {
-	std::__1::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-	time_t tt = std::chrono::system_clock::to_time_t(now);
-	std::cout << std::put_time(localtime(&tt), "[%Y%m%d_%H%M%S]");
+	struct tm * tinfo;
+	time_t rawtime;
+
+	time ( &rawtime );
+  	tinfo = localtime( &rawtime );
+	std::cout << "[" << tinfo->tm_year + 1900 <<  std::setfill ('0') << std::setw(2) << tinfo->tm_mon + 1;
+	std::cout << std::setfill ('0') << std::setw(2) << tinfo->tm_mday << "_";
+	// if ((tinfo->tm_hour) / 10 == 0)
+	// 	std::cout << "0";
+	std::cout << std::setfill ('0') << std::setw(2) << tinfo->tm_hour;
+	std::cout << std::setfill ('0') << std::setw(2) << tinfo->tm_min;
+	std::cout << std::setfill ('0') << std::setw(2) << tinfo->tm_sec << "]";
 }
 
 int	Account::getNbAccounts( void )

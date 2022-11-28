@@ -6,7 +6,7 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 00:54:01 by youhan            #+#    #+#             */
-/*   Updated: 2022/11/03 21:06:47 by youhan           ###   ########.fr       */
+/*   Updated: 2022/11/26 03:01:37 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ class PhoneBook
 	class Node
 	{
 		public:
-		int			status;
 		std::string	firstname;
 		std::string	lastname;
 		std::string	nickname;

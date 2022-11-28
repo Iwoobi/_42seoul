@@ -39,11 +39,6 @@ void	PhoneBook::data_init()
 	this->count = 0;
 	for(int i = 0; i < 8; i++)
 	{
-		this->member[i].status = 0;
-		if (i == 0)
-			member[i].status = -1;
-		if (i == 7)
-			member[i].status = 1;
 		this->member[i].darkestsecret = "";
 		this->member[i].nickname = "";
 		this->member[i].lastname = "";
@@ -78,20 +73,17 @@ void	PhoneBook::add()
 		}
 		this->count -= 1;
 	}
-	else
-	{
-		std::cout << "firstname" << std::endl;
-		std::cin >> this->member[this->count].firstname;
-		std::cout << "lastname" << std::endl;
-		std::cin >> this->member[this->count].lastname;
-		std::cout << "nickname" << std::endl;
-		std::cin >> this->member[this->count].nickname;
-		std::cout << "phonenum" << std::endl;
-		std::cin >> this->member[this->count].phonenum;
-		std::cout << "darkestsecret" << std::endl;
-		std::cin >> this->member[this->count].darkestsecret;
-		this->count += 1;
-	}
+	std::cout << "firstname" << std::endl;
+	std::getline(std::cin,this->member[this->count].firstname);
+	std::cout << "lastname" << std::endl;
+	std::getline(std::cin, this->member[this->count].lastname);
+	std::cout << "nickname" << std::endl;
+	std::getline(std::cin, this->member[this->count].nickname);
+	std::cout << "phonenum" << std::endl;
+	std::getline(std::cin, this->member[this->count].phonenum);
+	std::cout << "darkestsecret" << std::endl;
+	std::getline(std::cin, this->member[this->count].darkestsecret);
+	this->count += 1;
 }
 
 void	PhoneBook::search()
@@ -104,29 +96,36 @@ void	PhoneBook::search()
 		std::cout << "Contact is blank" << std::endl;
 		return ;
 	}
+	std::cout << "-----------------------------------------" <<  std::endl;
 	std::cout << std::setw(11);
 	std::cout << "index|";
 	std::cout << std::setw(11);
 	std::cout << "firstname|";
 	std::cout << std::setw(11);
 	std::cout << "lastname|";
-	std::cout << std::setw(11);
+	std::cout << std::setw(10);
 	std::cout << "nickname" << std::endl;
+
 	for(int i = 0; i < this->count; i++)
 		this->printf(i);
-	std::cin >>	num;
-	buf << num;
-	buf >> index;
-	if (index > this->count || index == 0)
+	std::getline(std::cin, num);
+	if (num.length() != 1)
 	{
+		std::cout << "---------------------------------------------" <<  std::endl;
 		std::cout << "check index" << std::endl;
+		std::cout << "---------------------------------------------" <<  std::endl;
 		return ;
 	}
-		std::string	firstname;
-		std::string	lastname;
-		std::string	nickname;
-		std::string	phonenum;
-		std::string	darkestsecret;
+	buf << num;
+	buf >> index;
+	if (index > this->count || index <= 0 )
+	{
+		std::cout << "---------------------------------------------" <<  std::endl;
+		std::cout << "check index" << std::endl;
+		std::cout << "---------------------------------------------" <<  std::endl;
+		return ;
+	}
+	std::cout << "----------------------------------------------" <<  std::endl;
 	std::cout << std::setw(16);
 	std::cout << "firstname : ";
 	std::cout << this->member[index - 1].firstname << std::endl;
@@ -139,6 +138,7 @@ void	PhoneBook::search()
 	std::cout << std::setw(16);
 	std::cout << "darkestsecret : ";
 	std::cout << this->member[index - 1].darkestsecret << std::endl;
+	std::cout << "----------------------------------------------" <<  std::endl;
 }
 
 void	PhoneBook::exit()

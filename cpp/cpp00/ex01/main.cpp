@@ -15,7 +15,7 @@ int	main()
 	while (1)
 	{
 		printf_data();
-		std::cin >> input;
+		std::getline(std::cin, input);
 		if (input == "SEARCH")
 			data.search();
 		else if (input == "ADD")
@@ -25,11 +25,7 @@ int	main()
 			data.exit();
 			break;
 		}
-		else if (input == "count")
-		{
-			data.countprint();
-		}
 	}
-	system("leaks my_phone");
+	system("leaks ex01");
 	return (1);
 }

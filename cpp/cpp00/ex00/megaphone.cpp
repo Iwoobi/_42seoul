@@ -6,12 +6,12 @@
 /*   By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 16:12:41 by youhan            #+#    #+#             */
-/*   Updated: 2022/11/03 20:03:50 by youhan           ###   ########.fr       */
+/*   Updated: 2022/11/26 01:30:02 by youhan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-
+#include <ctype.h>
 int	main(int argc, char **argv)
 {
 	int	i;
@@ -28,10 +28,7 @@ int	main(int argc, char **argv)
 		j = 0;
 		while (argv[i][j] != '\0')
 		{
-			if (argv[i][j] >= 'a' && argv[i][j] <= 'z')
-				std::cout << (char)(argv[i][j] + 'A' - 'a');
-			else
-				std::cout << argv[i][j];
+			std::cout << (char)toupper(argv[i][j]);
 			j++;
 		}
 		i++;

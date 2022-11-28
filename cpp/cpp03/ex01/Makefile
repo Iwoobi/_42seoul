@@ -5,20 +5,20 @@
 #                                                     +:+ +:+         +:+      #
 #    By: youhan <youhan@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/09/28 22:00:01 by youhan            #+#    #+#              #
-#    Updated: 2022/11/25 23:20:04 by youhan           ###   ########.fr        #
+#    Created: 2022/11/25 21:58:40 by youhan            #+#    #+#              #
+#    Updated: 2022/11/26 05:35:16 by youhan           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ex01
+NAME = ex03
 CC = c++
 CFLAG = -Wall -Werror -Wextra -std=c++98
-SRCS =	main.cpp PhoneBook.cpp
+SRCS =	 main.cpp ClapTrap.cpp ScavTrap.cpp
 OBJS = ${SRCS:.cpp=.o}
 
-.o : .c
+.o : .cpp
 	${CC} ${CFLAGS} -c $< -o $@
-	
+	 
 ${NAME} : ${OBJS} ${MLX}
 	${CC} ${CFLAG} -o ${NAME} ${OBJS}
 
