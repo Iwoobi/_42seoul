@@ -1,0 +1,7 @@
+
+*.o
+*.out
+*.log
+*.json
+*/.DSY
+.vscode
