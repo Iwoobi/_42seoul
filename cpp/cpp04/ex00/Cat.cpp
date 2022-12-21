@@ -28,7 +28,7 @@ Cat::Cat( const Cat & src )
 
 Cat::~Cat()
 {
-	std::cout << "delete Cat " << this->type << std::endl; 	
+	std::cout << "delete Cat" << std::endl; 	
 }
 
 

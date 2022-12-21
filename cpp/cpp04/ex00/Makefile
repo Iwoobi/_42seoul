@@ -1,7 +1,7 @@
 NAME = ex00
 CC = c++
 CFLAG = -Wall -Werror -Wextra -std=c++98
-SRCS =	 main.cpp Dog.cpp Cat.cpp Animal.cpp
+SRCS =	 main.cpp Dog.cpp WrongCat.cpp WrongAnimal.cpp Cat.cpp Animal.cpp
 OBJS = ${SRCS:.cpp=.o}
 
 .o : .cpp

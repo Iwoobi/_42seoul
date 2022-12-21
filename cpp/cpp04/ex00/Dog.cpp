@@ -29,7 +29,7 @@ Dog::Dog( const Dog & src )
 
 Dog::~Dog()
 {
-	std::cout << "delete Dog " << this->type << std::endl; 	
+	std::cout << "delete Dog" << std::endl; 	
 }
 
 

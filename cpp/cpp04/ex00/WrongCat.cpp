@@ -1,36 +1,34 @@
-#include "Animal.hpp"
+#include "WrongCat.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-Animal::Animal()
+WrongCat::WrongCat()
 {
-	this->type = "";
-	std::cout << "make Animal" << std::endl;
+	this->type = "WrongCat";
+	std::cout << "make WrongCat" << std::endl;
 }
 
-Animal::Animal(std::string src)
+WrongCat::WrongCat(std::string type)
 {
-	this->type = src;
-	std::cout << "make Animal " << src << std::endl;
+	this->type = type;
+	std::cout << "make WrongCat" << type << std::endl;
 }
 
-
-Animal::Animal( const Animal & src )
+WrongCat::WrongCat( const WrongCat & src )
 {
 	this->type = src.type;
-	std::cout << "copy Animal " << src.type << std::endl;
+	std::cout << "copy WrongCat " << src.type << std::endl;
 }
-
 
 /*
 ** -------------------------------- DESTRUCTOR --------------------------------
 */
 
-Animal::~Animal()
+WrongCat::~WrongCat()
 {
-	std::cout << "delete Animal" << std::endl; 	
+	std::cout << "delete WrongCat" << std::endl; 	
 }
 
 
@@ -38,25 +36,24 @@ Animal::~Animal()
 ** --------------------------------- OVERLOAD ---------------------------------
 */
 
-Animal &				Animal::operator=( Animal const & rhs )
+WrongCat &				WrongCat::operator=( WrongCat const & rhs )
 {
 	if ( this != &rhs )
 	{
 		this->type = rhs.type;
-	}
+	} 
 	return *this;
 }
 
-void		 Animal::makeSound() const
+void		WrongCat::makeSound() const
 {
-	std::cout << "make a Animal sound " << this->type << std::endl;
+	std::cout << "make a WrongCat sound " << this->type << std::endl;
 }
 
-std::string	 Animal::getType() const
-{
-	return (this->type);
-}
-
+// std::string	WrongCat::getType() const
+// {
+// 	return (this->type);
+// }
 
 
 
