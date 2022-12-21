@@ -85,6 +85,5 @@ void	ScavTrap::attack(const std::string& target)
 
 int	ScavTrap::get_energy_point()
 {
-	std::cout << this->energy_point << std::endl;
-	return (this->energy_point);
+	return (this->ScavTrap::energy_point);
 }

@@ -125,7 +125,7 @@ Fixed& Fixed::operator*(const Fixed& l)
 }
 Fixed& Fixed::operator/(const Fixed& l)
 {
-	Fixed *b = new Fixed();
+	Fixed b(*this);
 	b->a = roundf(((float)l.a / (float)this->a) * 256);
 	return (*b);
 }
@@ -134,12 +134,26 @@ Fixed& Fixed::operator++(void)
 	this->a += 1;
 	return (*this);
 }
+
 Fixed& Fixed::operator++(int)
 {
-	Fixed *b = new Fixed();
-	b->a = this->a;
+	Fixed	b(*this);
+	
 	this->a += 1;
-	return (*b);
+	return (b);
+}
+
+const Fixed& Fixed::max(Fixed& a, Fixed& b)
+{
+	if (a.a > b.a)
+		return (a);
+	return (b);
+}
+const Fixed& Fixed::min(Fixed& a, Fixed& b)
+{
+	if (a.a > b.a)
+		return (b);
+	return (a);
 }
 
 const Fixed& Fixed::max(const Fixed& a, const Fixed& b)

@@ -4,20 +4,29 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
+
 DiamondTrap::DiamondTrap(std::string name)
 {
+	ScavTrap	scav;
+	FragTrap	frag;
 	this->Name = name;
-	this->hit_point = FragTrap::get_hit_point();
-	this->attack_damage = FragTrap::get_attack_damage();
-	this->energy_point = ScavTrap::get_energy_point();
+	this->ClapTrap::Name = name + "_clap_name";
+	this->hit_point = frag.get_hit_point();
+	this->attack_damage = frag.get_attack_damage();
+	this->energy_point = scav.get_energy_point();
 	std::cout << "create DiamondTrap " << this->Name <<std::endl;
 }
 
 DiamondTrap::DiamondTrap()
 {
-	this->hit_point = FragTrap::get_hit_point();
-	this->attack_damage = FragTrap::get_attack_damage();
-	this->energy_point = ScavTrap::get_energy_point();
+	ScavTrap	scav;
+	FragTrap	frag;
+
+	this->Name = "";
+	this->ClapTrap::Name = this->Name + "_clap_name";
+	this->hit_point = frag.get_hit_point();
+	this->attack_damage = frag.get_attack_damage();
+	this->energy_point = scav.get_energy_point();
 	std::cout << "create DiamondTrap" <<std::endl;
 }
 

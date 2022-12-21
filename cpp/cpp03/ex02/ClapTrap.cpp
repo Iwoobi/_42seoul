@@ -27,7 +27,7 @@ ClapTrap::ClapTrap( const ClapTrap & src )
 	this->Name = src.Name;
 	this->hit_point = src.hit_point;
 	this->energy_point = src.energy_point;
-	std::cout << "create ClapTrap " << this->Name << std::endl;
+	std::cout << "copy ClapTrap " << this->Name << std::endl;
 }
 
 
