@@ -3,6 +3,7 @@
 
 # include <iostream>
 # include <ostream>
+
 class Fixed
 {
 	private:
@@ -25,21 +26,18 @@ class Fixed
 		bool operator<=(const Fixed& l);
 		bool operator==(const Fixed& l);
 		bool operator!=(const Fixed& l);
-		Fixed& operator+(const Fixed& l);
-		Fixed& operator-(const Fixed& l);
-		Fixed& operator*(const Fixed& l);
-		Fixed& operator/(const Fixed& l);
-		Fixed& operator++(void);
-		Fixed& operator++(int);
+		Fixed operator+(const Fixed& l);
+		Fixed operator-(const Fixed& l);
+		Fixed operator*(const Fixed& l);
+		Fixed operator/(const Fixed& l);
+		Fixed operator++(void);
+		const Fixed operator++(int);
 		static const Fixed& max(Fixed& a, Fixed& b);
 		static const Fixed& min(Fixed& a, Fixed& b);
 		static const Fixed& max(const Fixed& a, const Fixed& b);
 		static const Fixed& min(const Fixed& a, const Fixed& b);
 };
 std::ostream& operator<<(std::ostream& os, const Fixed& val);
-
-
-
 
 
 #endif

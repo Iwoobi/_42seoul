@@ -70,78 +70,92 @@ std::ostream& operator<<(std::ostream& os, const Fixed& val)
 	return (os);
 }
 
-bool Fixed::operator<(const Fixed& l)
-{
-	if (l.a < this->a)
-		return (1);
-	return (0);
-}
-bool Fixed::operator>(const Fixed& l)
+bool Fixed::operator<(const Fixed& l) const
 {
 	if (l.a > this->a)
 		return (1);
 	return (0);
 }
-bool Fixed::operator>=(const Fixed& l)
+bool Fixed::operator>(const Fixed& l) const
 {
-	if (l.a >= this->a)
+	if (l.a < this->a)
 		return (1);
 	return (0);
 }
-bool Fixed::operator<=(const Fixed& l)
+bool Fixed::operator>=(const Fixed& l) const
 {
 	if (l.a <= this->a)
 		return (1);
 	return (0);
 }
-bool Fixed::operator==(const Fixed& l)
+bool Fixed::operator<=(const Fixed& l) const
+{
+	if (this->a <= l.a)
+		return (1);
+	return (0);
+}
+bool Fixed::operator==(const Fixed& l) const
 {
 	if (l.a == this->a)
 		return (1);
 	return (0);
 }
-bool Fixed::operator!=(const Fixed& l)
+bool Fixed::operator!=(const Fixed& l) const
 {
 	if (l.a != this->a)
 		return (1);
 	return (0);
 }
-Fixed& Fixed::operator+(const Fixed& l)
+Fixed Fixed::operator+(const Fixed& l) const
 {
-	Fixed *b = new Fixed;
-	b->a = l.a + this->a;
-	return (*b);
+	Fixed b;
+	b.a = l.a + this->a;
+	return (b);
 }
-Fixed& Fixed::operator-(const Fixed& l)	const
+Fixed Fixed::operator-(const Fixed& l) const
 {
-	Fixed *b = new Fixed;
-	b->a = l.a - this->a;
-	return (*b);
+	Fixed b;
+	b.a = this->a - l.a;
+	return (b);
 }
-Fixed& Fixed::operator*(const Fixed& l) const
+Fixed Fixed::operator*(const Fixed& l) const
 {
-	Fixed *b = new Fixed;
-	int	i = l.a * this->a;
-	b->a = roundf(i/256);
-	return (*b);
+	Fixed b;
+	b.a = roundf((l.a * this->a)/256);
+	return (b);
 }
-Fixed& Fixed::operator/(const Fixed& l)
+
+Fixed Fixed::operator/(const Fixed& l) const
 {
-	Fixed *b = new Fixed;
-	b->a = roundf(((float)l.a / (float)this->a) * 256);
-	return (*b);
+	Fixed b;
+	b.a = roundf(((float)this->a / (float)l.a) * 256);
+	return (b);
 }
-Fixed& Fixed::operator++(void)
+Fixed Fixed::operator++(void)
 {
 	this->a += 1;
 	return (*this);
 }
-Fixed& Fixed::operator++(int)
+
+const Fixed Fixed::operator++(int)
 {
-	Fixed *b = new Fixed;
-	b->a = this->a;
+	const Fixed	b(*this);
+	
 	this->a += 1;
-	return (*b);
+	return (b);
+}
+
+const Fixed& Fixed::max(Fixed& a, Fixed& b)
+{
+	if (a.a > b.a)
+		return (a);
+	return (b);
+}
+const Fixed& Fixed::min(Fixed& a, Fixed& b)
+{
+	if (a.a > b.a)
+		return (b);
+	return (a);
 }
 
 const Fixed& Fixed::max(const Fixed& a, const Fixed& b)

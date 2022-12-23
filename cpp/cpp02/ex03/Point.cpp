@@ -50,12 +50,12 @@ Point::Point(float x, float y)
 	this->y = Fixed(y);
 }
 
-Point &		Point::operator-( Point const & rhs ) const
+Point 		Point::operator-( Point const & rhs ) const
 {
-	Point *tmp = new Point;
-	tmp->x = this->x - rhs.x;
-	tmp->y = this->y - rhs.y;
-	return (*tmp);
+	Point tmp;
+	tmp.x = this->x - rhs.x;
+	tmp.y = this->y - rhs.y;
+	return (tmp);
 }
 int		Point::operator*( Point const & rhs )	const
 {

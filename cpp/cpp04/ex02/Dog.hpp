@@ -4,9 +4,11 @@
 # include <iostream>
 # include <string>
 #include "Animal.hpp"
+#include "Brain.hpp"
 
 class Dog : public Animal
 {
+
 	public:
 
 		Dog();
@@ -17,6 +19,7 @@ class Dog : public Animal
 		Dog &		operator=( Dog const & rhs );
 		void	makeSound() const;
 	private:
+		Brain *brain;
 
 };
 

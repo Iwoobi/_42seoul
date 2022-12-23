@@ -21,7 +21,7 @@ Fixed::~Fixed()
 
 Fixed &				Fixed::operator=( Fixed const & rhs )
 {
-	std::cout << "Assignation operator called" << std::endl;
+	std::cout << "Copy assignation operator called" << std::endl;
 	if ( this != &rhs )
 	{
 		this->a = rhs.getRawBits();
@@ -43,7 +43,7 @@ void Fixed::setRawBits( int const raw )
 
 Fixed::Fixed(const int val)
 {
-	this->a = val * 256;
+	this->a = roundf(val * 256);
 }
 
 Fixed::Fixed(const float val)

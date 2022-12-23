@@ -8,7 +8,7 @@ int main()
 	const Animal* meta = new Animal();
 	const Animal* j = new Dog();
 	const Animal* i = new Cat();
-	const WrongAnimal *l = new WrongAnimal;
+	const WrongAnimal *l = new WrongAnimal();
 	const WrongAnimal *k = new WrongCat();
 
 
