@@ -36,9 +36,9 @@ Brain &				Brain::operator=( Brain const & rhs )
 {
 	if ( this != &rhs )
 	{
-		for (int i = 0; i < 100; i++)
-			this->ideas[i] = rhs.ideas[i];
-		// *this = rhs;
+		// for (int i = 0; i < 100; i++)
+		// 	this->ideas[i] = rhs.ideas[i];
+		*this = rhs;
 	}
 	return *this;
 }

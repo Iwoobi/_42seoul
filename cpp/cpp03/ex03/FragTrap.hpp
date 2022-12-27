@@ -13,7 +13,10 @@ class FragTrap : virtual public ClapTrap
 		~FragTrap();
 		int	get_hit_point();
 		int	get_attack_damage();
-
+		void f_a()
+		{
+			std::cout <<"1" << std::endl;
+		}
 		FragTrap &		operator=( FragTrap const & rhs );
 		void highFivesGuys(void);
 };

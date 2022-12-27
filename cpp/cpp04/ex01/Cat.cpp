@@ -42,11 +42,10 @@ Cat::~Cat()
 
 Cat &				Cat::operator=( Cat const & rhs )
 {
-	std::cout << "Asdsad\n" <<std::endl;
 	if ( this != &rhs )
 	{
 		this->type = rhs.type;
-		this->brain = rhs.brain;
+		*(this->brain) = *(rhs.brain);
 	} 
 	return *this;
 }

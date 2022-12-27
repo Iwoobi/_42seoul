@@ -33,11 +33,12 @@ int test()
 	}
 	for (int i = 0; i < 10; i++)
 		delete ani[i];
-
-	Cat *a = new Cat;
-	Cat *b = new Cat;
-	delete a;
-	delete b;
+	std::cout << "----------------" << std::endl;
+	Cat a;
+	Cat b;
+	std::cout << "----------------" << std::endl;
+	a = b;
+	system("leaks ex01");
 	return 0;
 
 }
@@ -45,7 +46,6 @@ int test()
 int main()
 {
 	test();
-	system("leaks ex01");
 	return 0;
 }
 

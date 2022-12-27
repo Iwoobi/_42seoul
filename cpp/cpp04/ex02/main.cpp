@@ -5,5 +5,6 @@
 
 int main()
 {
-	Animal i;
+	Animal *i = new Dog();
+	i->makeSound();
 }

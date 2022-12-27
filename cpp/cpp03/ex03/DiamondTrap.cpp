@@ -66,8 +66,12 @@ DiamondTrap &				DiamondTrap::operator=( DiamondTrap const & rhs )
 	}
 	return *this;
 }
-
+#include "stdio.h"
 void DiamondTrap::attack(const std::string& target)
 {
-	ScavTrap::attack(target);
+	// void (ClapTrap::*fptr)(const std::string& target) = &FragTrap::Claptrap::attack;
+	// printf("%p\n", reinterpret_cast<void *&>(fptr));
+	// void (ScavTrap::*fptr1)(const std::string& target) = &ScavTrap::attack;
+	// printf("%p\n", reinterpret_cast<void *&>(fptr1));
+
 }

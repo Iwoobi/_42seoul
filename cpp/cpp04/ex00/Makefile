@@ -1,12 +1,10 @@
 NAME = ex01
 CC = c++
-CPPFLAGS = -Wall -Werror -Wextra -MMD -std=c++98
+CPPFLAGS = -Wall -Werror -Wextra -std=c++98
 SRCS =	main.cpp Animal.cpp Dog.cpp Cat.cpp WrongAnimal.cpp WrongCat.cpp
 OBJS = ${SRCS:.cpp=.o}
-DEPS = ${SRCS:.cpp=.d}
 
 
--include $(DEPS)
 
 .o : .cpp
 	${CC} ${CPPFLAGS} -c $< -o $@

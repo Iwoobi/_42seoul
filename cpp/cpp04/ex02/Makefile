@@ -1,11 +1,8 @@
 NAME = ex02
 CC = c++
-CPPFLAGS = -Wall -Werror -Wextra -MMD -std=c++98
+CPPFLAGS = -Wall -Werror -Wextra -std=c++98
 SRCS =	main.cpp Animal.cpp Brain.cpp Dog.cpp Cat.cpp 
 OBJS = ${SRCS:.cpp=.o}
-DEPS = ${SRCS:.cpp=.d}
-
--include $(DEPS)
 
 .o : .cpp
 	${CC} ${CPPFLAGS} -c $< -o $@

@@ -17,7 +17,11 @@ class ClapTrap
 		void takeDamage(unsigned int amount);
 		void beRepaired(unsigned int amount);
 		void status();
-		void set_attack_dmg(int dmg);
+		void f_a()
+		{
+			std::cout <<"1" << std::endl;
+		}
+		void set_attack_dmg(int dmg); 
 		ClapTrap &		operator=( ClapTrap const & rhs );
 
 	protected:

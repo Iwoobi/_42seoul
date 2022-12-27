@@ -15,6 +15,10 @@ class  ScavTrap : virtual public ClapTrap
 		void	guardGate();
 		void attack(const std::string& target);
 		int	get_energy_point();
+		void f_a()
+		{
+			std::cout <<"1" << std::endl;
+		}
 		ScavTrap &		operator=( ScavTrap const & rhs );
 
 };
