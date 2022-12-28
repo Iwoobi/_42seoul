@@ -8,3 +8,5 @@ int main()
 	Animal *i = new Dog();
 	i->makeSound();
 }
+
+
