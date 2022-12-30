@@ -79,7 +79,29 @@ std::string Form::getName() const
 
 void	Form::beSigned(Bureaucrat src)
 {
+	try
+	{
+		src.signForm(*this);
+		if (src.getGrade() > this->grade)
+			throw Form::GradeTooLowException();
+		this->sign = 1;
+	}
+	catch(const std::exception& e)
+	{
+
+		std::cerr << e.what() << '\n';
+	}
 	
+}
+
+const char* Form::GradeTooHighException::what() const throw()
+{
+	return ("too high grade, Form\n");
+}
+
+const char* Form::GradeTooLowException::what() const throw()
+{
+	return ("too low grade, Form\n");
 }
 /*
 ** --------------------------------- METHODS ----------------------------------
