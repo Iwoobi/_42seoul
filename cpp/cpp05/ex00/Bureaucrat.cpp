@@ -21,7 +21,8 @@ Bureaucrat::Bureaucrat(std::string name, int grade) : name(name)
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		this->grade = -1;
+		std::cerr << e.what() << ", check " << this->name << std::endl;
 	}
 }
 
@@ -76,11 +77,13 @@ void	Bureaucrat::upgrade()
 	{
 		if (this->grade == 1)
 			throw Bureaucrat::GradeTooHighException();
+		else if (this->grade == -1)
+			throw Bureaucrat::GradeWrongException();
 		this->grade -= 1;
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << e.what() << ", check " << this->name << std::endl;
 	}
 }
 void	Bureaucrat::downgrade()
@@ -89,17 +92,25 @@ void	Bureaucrat::downgrade()
 	{
 		if (this->grade == 150)
 			throw Bureaucrat::GradeTooLowException();
+		else if (this->grade == -1)
+			throw Bureaucrat::GradeWrongException();
 		this->grade += 1;
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << e.what() << ", check " << this->name << std::endl;
 	}
 }
 const char* Bureaucrat::GradeTooHighException::what() const throw()
 {	
 	return ("too high grade");
 }
+
+const char* Bureaucrat::GradeWrongException::what() const throw()
+{	
+	return ("Wrong grade");
+}
+
 const char* Bureaucrat::GradeTooLowException::what() const throw()
 {
 	return ("too low grade");
