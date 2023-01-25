@@ -1,4 +1,4 @@
-NAME = ex02
+NAME = ex03
 CC = c++
 CPPFLAGS = -Wall -Werror -Wextra -std=c++98
 SRCS =	main.cpp AMateria.cpp Character.cpp Ice.cpp Cure.cpp MateriaSource.cpp  ICharacter.cpp IMateriaSource.cpp

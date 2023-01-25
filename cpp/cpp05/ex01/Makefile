@@ -1,7 +1,7 @@
-NAME = ex00
+NAME = ex01
 CC = c++
 CPPFLAGS = -Wall -Werror -Wextra -std=c++98
-SRCS =	main.cpp Bureaucrat.cpp
+SRCS =	main.cpp Bureaucrat.cpp Form.cpp
 OBJS = ${SRCS:.cpp=.o}
 
 .o : .cpp

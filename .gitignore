@@ -1,7 +1,7 @@
 
-*.o
-*.out
-*.log
-*.json
-*/.DSY
-.vscode
+*/*.o
+*/*.out
+*/*.log
+*/*.json
+*/.DSYM
+*/.vscode
