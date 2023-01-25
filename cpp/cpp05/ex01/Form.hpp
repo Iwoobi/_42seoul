@@ -13,7 +13,7 @@ class Form
 		Form();
 		Form( Form const & src );
 		~Form();
-		Form::Form(std::string name, int grade);
+		Form(std::string name, int grade);
 		void	beSigned(Bureaucrat src);
 		int getGrade() const;
 		bool getSign() const;

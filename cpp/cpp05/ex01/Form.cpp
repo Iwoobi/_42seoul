@@ -4,17 +4,17 @@
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-Form::Form() : grade(150), name("")
+Form::Form() : name("") , grade(150)
 {
 	this->sign = 0;
 }
 
-Form::Form( const Form & src ) : grade(src.grade), name(src.name)
+Form::Form( const Form & src ) : name(src.name) ,grade(src.grade)
 {
 	this->sign = src.sign;
 }
 
-Form::Form(std::string name, int grade) : grade(grade), name(name)
+Form::Form(std::string name, int grade) : name(name), grade(grade)
 {
 	try
 	{
@@ -51,7 +51,7 @@ Form &				Form::operator=( Form const & rhs )
 
 std::ostream &			operator<<( std::ostream & o, Form const & i )
 {
-	o << "-------------------"
+	o << "-------------------\n"
 	<< "name : " << i.getName()
 	<< "\nrequired grade : " << i.getGrade()
 	<< "\nsign : ";
@@ -88,7 +88,6 @@ void	Form::beSigned(Bureaucrat src)
 	}
 	catch(const std::exception& e)
 	{
-
 		std::cerr << e.what() << '\n';
 	}
 	

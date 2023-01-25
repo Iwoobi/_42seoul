@@ -1,11 +1,9 @@
 #include "Bureaucrat.hpp"
-
+#include "Form.hpp"
 int main()
 {
-	Bureaucrat b("a", 2);
-	b.upgrade();
-	b.upgrade();
-	std::cout << b ;
+	Form a("b",-1);
+	std::cout << a ;
 	
 	
 }
