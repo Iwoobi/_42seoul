@@ -66,7 +66,16 @@ int Bureaucrat::getGrade() const
 
 std::ostream &			operator<<( std::ostream & o, Bureaucrat const & i )
 {
-	o << i.getName() << " bureaucrat grade " << i.getGrade();
+	try
+	{
+		if (i.getGrade() == -1)
+			throw Bureaucrat::GradeWrongException();
+		o << i.getName() << " bureaucrat grade " << i.getGrade();
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << ", check " << i.getName() << std::endl;
+	}
 	return o;
 }
 
@@ -97,10 +106,26 @@ void	Bureaucrat::downgrade()
 		this->grade += 1;
 	}
 	catch(const std::exception& e)
+
 	{
 		std::cerr << e.what() << ", check " << this->name << std::endl;
 	}
 }
+
+void	Bureaucrat::signForm(Form &src)
+{
+	try
+	{
+		if (this->grade > 150 || this->grade < 1)
+			throw Bureaucrat::GradeWrongException();
+		src.beSigned(*this);
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << " , check Bureaucrat" <<std::endl;
+	}
+}
+
 const char* Bureaucrat::GradeTooHighException::what() const throw()
 {	
 	return ("too high grade");

@@ -14,10 +14,10 @@ Bureaucrat::Bureaucrat(std::string name, int grade) : name(name)
 	this->grade = grade;
 	try
 	{
-		if (grade > 150)
-			throw Bureaucrat::GradeTooLowException();
-		else if (grade < 1)
+		if (grade < 1)
 			throw Bureaucrat::GradeTooHighException();
+		else if (grade > 150)
+			throw Bureaucrat::GradeTooLowException();
 	}
 	catch(const std::exception& e)
 	{
@@ -66,10 +66,18 @@ int Bureaucrat::getGrade() const
 
 std::ostream &			operator<<( std::ostream & o, Bureaucrat const & i )
 {
-	o << i.getName() << " bureaucrat grade " << i.getGrade();
+	try
+	{
+		if (i.getGrade() == -1)
+			throw Bureaucrat::GradeWrongException();
+		o << i.getName() << " bureaucrat grade " << i.getGrade() << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << ", check " << i.getName() << std::endl;
+	}
 	return o;
 }
-
 
 void	Bureaucrat::upgrade()
 {

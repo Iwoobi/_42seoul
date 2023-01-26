@@ -2,25 +2,24 @@
 
 int main()
 {
-<<<<<<< HEAD
-	Bureaucrat a("a", 154);
+	Bureaucrat a("a", -1);
+	a.downgrade();
+	std::cout << a;
 	a.upgrade();
+	std::cout << a;
 	a.upgrade();
+	std::cout << a;
 	a.upgrade();
+	std::cout << a;
 	a.upgrade();
+	std::cout << a;
 	a.upgrade();
+	std::cout << a;
 	
 	a.downgrade();
+	std::cout << a;
 	a.downgrade();
+	std::cout << a;
 	a.downgrade();
-	
-
-=======
-	Bureaucrat b("a", 2);
-	b.upgrade();
-	b.upgrade();
-	std::cout << b ;
-	
-	
->>>>>>> b3efd059143ded17cab1353dac0cb9543cd1adf0
+	std::cout << a;
 }

@@ -9,8 +9,6 @@ class Form
 {
 
 	public:
-
-		Form();
 		Form( Form const & src );
 		~Form();
 		Form(std::string name, int grade);
@@ -28,16 +26,23 @@ class Form
 			public:
 			const char* what() const throw();
 		};
+		class GradeFailException : public std::exception
+		{
+			public:
+			const char* what() const throw();
+		};
 		class GradeTooLowException : public std::exception
 		{
 			public:
 			const char* what() const throw();
 		};
 	private:
-		bool	sign;
-		const std::string name;
-		const int		grade;
+		bool				sign;
+		const std::string	name;
+		const int			grade;
+		const int			exec_grade;
 		Form &		operator=( Form const & rhs );
+		Form();
 };
 
 std::ostream &			operator<<( std::ostream & o, Form const & i );
