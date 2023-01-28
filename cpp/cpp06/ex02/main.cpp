@@ -5,7 +5,11 @@
 #include "B.hpp"
 #include "C.hpp"
 
-Base * generate(void);
+Base * generate(void)
+{
+	
+	return (tmp);
+}
 
 void identify(Base* p);
 {
