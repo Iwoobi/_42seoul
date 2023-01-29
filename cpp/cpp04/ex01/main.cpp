@@ -23,7 +23,7 @@ int test()
 		delete k[i];
 		delete l[i];
 	}
-	Animal *ani[100];
+	Animal *ani[10];
 	for (int i = 0; i < 10; i++)
 	{
 		if (i % 2 == 0)
@@ -36,9 +36,12 @@ int test()
 	std::cout << "----------------" << std::endl;
 	Cat a;
 	Cat b;
-	std::cout << "----------------" << std::endl;
+	Cat c;
+	Cat d = c;
 	a = b;
-	system("leaks ex01");
+	
+	std::cout << "----------------" << std::endl;
+
 	return 0;
 
 }
@@ -46,6 +49,7 @@ int test()
 int main()
 {
 	test();
+		system("leaks ex01");
 	return 0;
 }
 

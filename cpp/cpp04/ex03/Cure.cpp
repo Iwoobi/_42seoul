@@ -9,32 +9,33 @@ Cure::Cure()
 	this->type = "cure";
 }
 
-// Cure::Cure( const Cure & src )
-// {
-// }
+Cure::Cure( const Cure & src )
+{
+	this->type = src.getType();
+}
 
 
 // /*
 // ** -------------------------------- DESTRUCTOR --------------------------------
 // */
 
-// Cure::~Cure()
-// {
-// }
+Cure::~Cure()
+{
+}
 
 
 // /*
 // ** --------------------------------- OVERLOAD ---------------------------------
 // */
 
-// Cure &				Cure::operator=( Cure const & rhs )
-// {
-// 	//if ( this != &rhs )
-// 	//{
-// 		//this->_value = rhs.getValue();
-// 	//}
-// 	return *this;
-// }
+Cure &				Cure::operator=( Cure const & rhs )
+{
+	if ( this != &rhs )
+	{
+		this->type = rhs.getType();
+	}
+	return *this;
+}
 
 AMateria* Cure::clone() const
 {

@@ -11,7 +11,8 @@ Brain::Brain()
 
 Brain::Brain( const Brain & src )
 {
-	*this = src;
+	for (int i = 0; i < 100; i++)
+		this->ideas[i] = src.ideas[i];
 	std::cout << "Copy Brain" << std::endl;
 }
 
@@ -36,10 +37,10 @@ Brain &				Brain::operator=( Brain const & rhs )
 	{
 		for (int i = 0; i < 100; i++)
 			this->ideas[i] = rhs.ideas[i];
+		// *this = rhs;
 	}
 	return *this;
 }
-
 
 
 /*

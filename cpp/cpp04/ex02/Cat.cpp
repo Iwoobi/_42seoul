@@ -21,6 +21,8 @@ Cat::Cat(std::string type)
 Cat::Cat( const Cat & src )
 {
 	this->type = src.type;
+	this->brain = new Brain();
+	*(this->brain) = *(src.brain);
 	std::cout << "copy Cat " << src.type << std::endl;
 }
 
@@ -44,6 +46,7 @@ Cat &				Cat::operator=( Cat const & rhs )
 	if ( this != &rhs )
 	{
 		this->type = rhs.type;
+		*(this->brain) = *(rhs.brain);
 	} 
 	return *this;
 }
@@ -53,10 +56,6 @@ void		Cat::makeSound() const
 	std::cout << "make a Cat sound " << this->type << std::endl;
 }
 
-// std::string	Cat::getType() const
-// {
-// 	return (this->type);
-// }
 
 
 

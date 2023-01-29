@@ -18,7 +18,10 @@ Character::Character(std::string name)
 {
 	this->idx = 0;
 	for (int i = 0; i < 4; i++)
+	{
 		this->i_slot[i] = 0;
+		this->slot[i] = NULL;
+	}
 	this->name = name;
 }
 Character::Character( const Character & src )
@@ -27,7 +30,10 @@ Character::Character( const Character & src )
 	for (int i = 0; i < 4; i++)
 	{
 		this->i_slot[i] = src.i_slot[i];
-		this->slot[i] = src.slot[i];
+		if (src.i_slot[i] == 1)
+				this->slot[i] = src.slot[i]->clone();
+		else
+			this->slot[i] = NULL;
 	}
 	this->idx = src.idx;
 }
@@ -40,7 +46,12 @@ Character &				Character::operator=( Character const & rhs )
 		for (int i = 0; i < 4; i++)
 		{
 			this->i_slot[i] = rhs.i_slot[i];
-			this->slot[i] = rhs.slot[i];
+			if (rhs.i_slot[i] == 1)
+			{
+				this->slot[i] = rhs.slot[i]->clone();
+			}
+			else
+				this->slot[i] = NULL;
 		}
 		this->idx = rhs.idx;
 	}
@@ -53,6 +64,11 @@ std::string const & Character::getName() const
 
 Character::~Character()
 {
+	for (int i = 0; i < 4; i++)
+	{
+		if (this->i_slot[i] == 1)
+			delete this->slot[i];
+	}
 }
 
 
@@ -90,7 +106,7 @@ void Character::equip(AMateria* m)
 
 void Character::unequip(int idx)
 {
-	if (this->idx < idx)
+	if (idx > 3 || idx < 0)
 		return;
 	this->slot[idx] = NULL;
 	this->i_slot[idx] = 0;
@@ -98,8 +114,10 @@ void Character::unequip(int idx)
 
 void Character::use(int idx, ICharacter& target)
 {
+	if (idx > 3 || idx < 0)
+		return ;
 	if (this->i_slot[idx] == 0)
-		return;
+		return ;
 	this->slot[idx]->use(target);
 }
 /*

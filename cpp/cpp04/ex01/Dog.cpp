@@ -20,7 +20,8 @@ Dog::Dog(std::string type)
 Dog::Dog( const Dog & src )
 {
 	this->type = src.type;
-	this->brain = src.brain;
+	this->brain = new Brain();
+	*(this->brain) = *(src.brain);
 	std::cout << "copy Dog " << src.type << std::endl;
 }
 
@@ -46,7 +47,7 @@ Dog &				Dog::operator=( Dog const & rhs )
 	if ( this != &rhs )
 	{
 		this->type = rhs.type;
-		this->brain = rhs.brain;
+		*(this->brain) = *(rhs.brain);
 	}
 	return *this;
 }

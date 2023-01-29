@@ -9,32 +9,33 @@ Ice::Ice()
 	this->type = "ice";
 }
 
-// Ice::Ice( const Ice & src )
-// {
-// }
+Ice::Ice( const Ice & src )
+{
+	this->type = src.getType();
+}
 
 
 // /*
 // ** -------------------------------- DESTRUCTOR --------------------------------
 // */
 
-// Ice::~Ice()
-// {
-// }
+Ice::~Ice()
+{
+}
 
 
 // /*
 // ** --------------------------------- OVERLOAD ---------------------------------
 // */
 
-// Ice &				Ice::operator=( Ice const & rhs )
-// {
-// 	//if ( this != &rhs )
-// 	//{
-// 		//this->_value = rhs.getValue();
-// 	//}
-// 	return *this;
-// }
+Ice &				Ice::operator=( Ice const & rhs )
+{
+	if ( this != &rhs )
+	{
+		this->type = rhs.getType();
+	}
+	return *this;
+}
 AMateria* Ice::clone() const
 {
 	AMateria *tmp;
