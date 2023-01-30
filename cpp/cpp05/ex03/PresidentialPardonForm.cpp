@@ -10,10 +10,10 @@ PresidentialPardonForm::PresidentialPardonForm()
 
 PresidentialPardonForm::PresidentialPardonForm(std::string target)
 {
-	Form::setGrade(25);
-	Form::setGrade_exec(5);
-	Form::setName(target);
-	Form::setsign(0);
+	AForm::setGrade(25);
+	AForm::setGrade_exec(5);
+	AForm::setName(target);
+	AForm::setsign(0);
 }
 
 
@@ -45,16 +45,10 @@ PresidentialPardonForm &				PresidentialPardonForm::operator=( PresidentialPardo
 	return *this;
 }
 
-// std::ostream &			operator<<( std::ostream & o, PresidentialPardonForm const & i )
-// {
-// 	//o << "Value = " << i.getValue();
-// 	return o;
-// }
-
 void	PresidentialPardonForm::exec() const
 {
 	std::cout << " executed PresidentialPardonForm" << std::endl;
-	std::cout << Form::getName() << " has been pardoned by Zaphod Beeblebrox" << std::endl;
+	std::cout << AForm::getName() << " has been pardoned by Zaphod Beeblebrox" << std::endl;
 }
 /*
 ** --------------------------------- METHODS ----------------------------------

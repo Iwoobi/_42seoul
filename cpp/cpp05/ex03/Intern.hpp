@@ -12,14 +12,9 @@ class Intern
 	public:
 
 		Intern();
-		Form* makeForm(std::string form, std::string target);
+		AForm* makeForm(std::string form, std::string target);
 		~Intern();
 		class NotExistException : public std::exception
-		{
-			public:
-			const char* what() const throw();
-		};
-		class MallocException : public std::exception
 		{
 			public:
 			const char* what() const throw();

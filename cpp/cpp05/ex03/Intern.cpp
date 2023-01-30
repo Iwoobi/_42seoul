@@ -22,14 +22,14 @@ Intern::~Intern()
 {
 }
 
-Form*	Intern::makeForm(std::string form, std::string target)
+AForm*	Intern::makeForm(std::string form, std::string target)
 {
 	std::string	type[3] = {
 	"shrubbery creation",
 	"robotomy request",
 	"presidential pardon"
 	};
-	Form *tmp;
+	AForm *tmp;
 	int i = 0;
 	for (;i < 3; i++)
 	{
@@ -52,23 +52,16 @@ Form*	Intern::makeForm(std::string form, std::string target)
 			default:
 				throw NotExistException();
 		}
-		if (tmp == NULL)
-			throw NotExistException();
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << std::endl;
-		exit(0);
 	}
 	return (tmp);
 }
 const char* Intern::NotExistException::what() const throw()
 {
 	return ("It's a Form that doesn't exist");
-}
-const char* Intern::MallocException::what() const throw()
-{
-	return ("malloc error");
 }
 /*
 ** --------------------------------- OVERLOAD ---------------------------------
@@ -79,7 +72,7 @@ Intern &				Intern::operator=( Intern const & rhs )
 {
 	if ( this != &rhs )
 	{
-		*this = rhs;
+		return *this;
 	}
 	return *this;
 }

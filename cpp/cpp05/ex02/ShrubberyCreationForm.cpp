@@ -11,10 +11,10 @@ ShrubberyCreationForm::ShrubberyCreationForm()
 
 ShrubberyCreationForm::ShrubberyCreationForm(std::string target)
 {
-	Form::setGrade(145);
-	Form::setGrade_exec(137);
-	Form::setName(target);
-	Form::setsign(0);
+	AForm::setGrade(145);
+	AForm::setGrade_exec(137);
+	AForm::setName(target);
+	AForm::setsign(0);
 }
 
 ShrubberyCreationForm::ShrubberyCreationForm( const ShrubberyCreationForm & src )
@@ -49,7 +49,7 @@ void	ShrubberyCreationForm::exec() const
 {
 	std::ofstream		write;
 	std::cout << " executed ShrubberyCreationForm" << std::endl;
-	write.open(Form::getName() + "_shrubbery");
+	write.open(AForm::getName() + "_shrubbery");
 	if (!write.is_open())
 	{
 		std::cout << "file error" << std::endl;

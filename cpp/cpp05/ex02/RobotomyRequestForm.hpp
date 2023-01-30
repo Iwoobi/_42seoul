@@ -3,11 +3,11 @@
 
 # include <iostream>
 # include <string>
-# include "Form.hpp"
+# include "AForm.hpp"
 # include <stdlib.h>
 #include <time.h>
 
-class RobotomyRequestForm : public Form
+class RobotomyRequestForm : public AForm
 {
 
 	public:

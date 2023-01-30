@@ -1,28 +1,28 @@
-#include "Form.hpp"
+#include "AForm.hpp"
 
 /*
 ** ------------------------------- CONSTRUCTOR --------------------------------
 */
 
-Form::Form() : name("") , grade(150), exec_grade(0)
+AForm::AForm() : name("") , grade(150), exec_grade(0)
 {
 	this->sign = 0;
 }
 
-Form::Form( const Form & src ) : name(src.name) ,grade(src.grade), exec_grade(src.exec_grade)
+AForm::AForm( const AForm & src ) : name(src.name) ,grade(src.grade), exec_grade(src.exec_grade)
 {
 	this->sign = src.sign;
 }
 
-Form::Form(std::string name, int grade) : name(name), grade(grade), exec_grade(0)
+AForm::AForm(std::string name, int grade) : name(name), grade(grade), exec_grade(0)
 {
 	try
 	{
 		this->sign = 0;
 		if (grade > 150)
-			throw Form::GradeTooLowException();
+			throw AForm::GradeTooLowException();
 		else if ( grade < 1)
-			throw Form::GradeTooHighException();
+			throw AForm::GradeTooHighException();
 	}
 	catch(const std::exception& e)
 	{
@@ -33,7 +33,7 @@ Form::Form(std::string name, int grade) : name(name), grade(grade), exec_grade(0
 ** -------------------------------- DESTRUCTOR --------------------------------
 */
 
-Form::~Form()
+AForm::~AForm()
 {
 }
 
@@ -42,54 +42,63 @@ Form::~Form()
 ** --------------------------------- OVERLOAD ---------------------------------
 */
 
-Form &				Form::operator=( Form const & rhs )
+AForm &				AForm::operator=( AForm const & rhs )
 {
 	this->sign = rhs.sign;
 	return *this;
 }
 
-std::ostream &			operator<<( std::ostream & o, Form const & i )
+std::ostream &			operator<<( std::ostream & o, AForm const & i )
 {
-	o << "-------------------\n"
-	<< "target : " << i.getName()
-	<< "\nrequired grade : " << i.getGrade()
-	<< "\nrequired exec grade : " << i.getexec_Grade()
-	<< "\nsign : ";
-	if (i.getSign() == 1)
-		o << "o\n";
-	else
-		o << "x\n";
+	try
+	{
+		if (i.getGrade() > 150 || i.getGrade() < 1)
+			throw AForm::GradeWrongException();
+		o << "-------------------\n"
+		<< "name : " << i.getName()
+		<< "\nrequired grade : " << i.getGrade()
+		<< "\nsign : ";
+		if (i.getSign() == 1)
+			o << "o\n";
+		else
+			o << "x\n";
+		return o;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 	return o;
 }
 
-bool Form::getSign() const 
+bool AForm::getSign() const 
 {
 	return (this->sign);
 }
 
-int	Form::getGrade() const 
+int	AForm::getGrade() const 
 {
 	return (this->grade);
 }
 
-std::string Form::getName() const
+std::string AForm::getName() const
 {
 	return (this->name);
 }
 
-int Form::getexec_Grade() const
+int AForm::getexec_Grade() const
 {
 	return (this->exec_grade);
 }
 
-void	Form::beSigned(Bureaucrat src)
+void	AForm::beSigned(Bureaucrat src)
 {
 	try
 	{
 		if (this->grade > 150 || this->grade < 1)
-			throw Form::GradeWrongException();
+			throw AForm::GradeWrongException();
 		else if (src.getGrade() > this->grade)
-			throw Form::GradeFailException();
+			throw AForm::GradeFailException();
 		this->sign = true;
 		std::cout << src.getName() << " singed " << this->name << std::endl;
 	}
@@ -99,16 +108,16 @@ void	Form::beSigned(Bureaucrat src)
 	}
 }
 
-void	Form::execute(Bureaucrat const & executor) const
+void	AForm::execute(Bureaucrat const & executor) const
 {
 	try
 	{
 		if (this->grade > 150 || this->grade < 1)
-			throw Form::GradeWrongException();
-		else if (executor.getGrade() > this->grade)
-			throw Form::GradeFailException();
+			throw AForm::GradeWrongException();
+		else if (executor.getGrade() > this->exec_grade)
+			throw AForm::GradeFailException();
 		else if (this->sign != 1)
-			throw Form::GradeexecFailException();
+			throw AForm::GradeexecFailException();
 		std::cout << executor.getName();
 		this->exec();
 	}
@@ -118,48 +127,48 @@ void	Form::execute(Bureaucrat const & executor) const
 	}
 }
 
-const char* Form::GradeTooHighException::what() const throw()
+const char* AForm::GradeTooHighException::what() const throw()
 {
 	return ("too high grade, check Form");
 }
 
-const char* Form::GradeFailException::what() const throw()
+const char* AForm::GradeFailException::what() const throw()
 {
 	return ("you don't have permission");
 }
 
-const char* Form::GradeexecFailException::what() const throw()
+const char* AForm::GradeexecFailException::what() const throw()
 {
 	return ("Form be not signed");
 }
 
-const char* Form::GradeWrongException::what() const throw()
+const char* AForm::GradeWrongException::what() const throw()
 {	
 	return ("wrong Form grade, check Form");
 }
 
-const char* Form::GradeTooLowException::what() const throw()
+const char* AForm::GradeTooLowException::what() const throw()
 {
 	return ("too low grade, check Form");
 }
 
-void	Form::setGrade(int a)
+void	AForm::setGrade(int a)
 {
 	int &ref = const_cast<int&>(this->grade);
 	ref = a;
 }
 
-void	Form::setGrade_exec(int a)
+void	AForm::setGrade_exec(int a)
 {
 	int &ref = const_cast<int&>(this->exec_grade);
 	ref = a;
 }
 
-void	Form::setsign(bool a)
+void	AForm::setsign(bool a)
 {
 	this->sign = a;
 }
-void	Form::setName(std::string name)
+void	AForm::setName(std::string name)
 {
 	std::string &ref = const_cast<std::string&>(this->name);
 	ref = name;

@@ -50,14 +50,24 @@ Form &				Form::operator=( Form const & rhs )
 
 std::ostream &			operator<<( std::ostream & o, Form const & i )
 {
-	o << "-------------------\n"
-	<< "name : " << i.getName()
-	<< "\nrequired grade : " << i.getGrade()
-	<< "\nsign : ";
-	if (i.getSign() == 1)
-		o << "o\n";
-	else
-		o << "x\n";
+	try
+	{
+		if (i.getGrade() > 150 || i.getGrade() < 1)
+			throw Form::GradeWrongException();
+		o << "-------------------\n"
+		<< "name : " << i.getName()
+		<< "\nrequired grade : " << i.getGrade()
+		<< "\nsign : ";
+		if (i.getSign() == 1)
+			o << "o\n";
+		else
+			o << "x\n";
+		return o;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 	return o;
 }
 

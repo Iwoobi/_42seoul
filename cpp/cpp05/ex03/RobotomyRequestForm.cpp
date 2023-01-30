@@ -10,10 +10,10 @@ RobotomyRequestForm::RobotomyRequestForm()
 
 RobotomyRequestForm::RobotomyRequestForm(std::string target)
 {
-	Form::setGrade(72);
-	Form::setGrade_exec(45);
-	Form::setName(target);
-	Form::setsign(0);
+	AForm::setGrade(72);
+	AForm::setGrade_exec(45);
+	AForm::setName(target);
+	AForm::setsign(0);
 }
 
 RobotomyRequestForm::RobotomyRequestForm( const RobotomyRequestForm & src )

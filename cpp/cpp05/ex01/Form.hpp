@@ -9,7 +9,6 @@ class Form
 {
 
 	public:
-		Form( Form const & src );
 		~Form();
 		Form(std::string name, int grade);
 		void	beSigned(Bureaucrat src);
@@ -42,6 +41,7 @@ class Form
 		const int			grade;
 		const int			exec_grade;
 		Form &		operator=( Form const & rhs );
+		Form( Form const & src );
 		Form();
 };
 

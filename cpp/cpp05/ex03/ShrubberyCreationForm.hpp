@@ -3,9 +3,9 @@
 
 # include <iostream>
 # include <string>
-# include "Form.hpp"
+# include "AForm.hpp"
 # include <fstream>
-class ShrubberyCreationForm : public Form
+class ShrubberyCreationForm : public AForm
 {
 
 	public:

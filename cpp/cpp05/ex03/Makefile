@@ -1,7 +1,7 @@
 NAME = ex03
 CC = c++
 CPPFLAGS = -Wall -Werror -Wextra -std=c++98
-SRCS =	main.cpp Intern.cpp  Bureaucrat.cpp Form.cpp PresidentialPardonForm.cpp RobotomyRequestForm.cpp ShrubberyCreationForm.cpp 
+SRCS =	main.cpp Intern.cpp  Bureaucrat.cpp AForm.cpp PresidentialPardonForm.cpp RobotomyRequestForm.cpp ShrubberyCreationForm.cpp 
 OBJS = ${SRCS:.cpp=.o}
 
 .o : .cpp
