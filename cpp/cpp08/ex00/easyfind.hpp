@@ -1,16 +1,17 @@
-#ifndef EASTFIND_HPP
-# define EASTFIND_HPP
+#ifndef EASYFIND_HPP
+# define EASYFIND_HPP
 
 # include <iostream>
-# include <algorithm>
+# include <string>
 
+#include <algorithm>
 template <typename T>
-typename T::iterator	easyfind(T array, int val)
+typename T::iterator easyfind(T& data, int val)
 {
-	typename T::iterator iter;
-	iter = std::find(array.begin(), array.end(), val);
-	return (iter);
+    typename T::iterator i;
+
+    i = std::find(data.begin(), data.end(), val);
+    return (i);
 }
 
-
-#endif 
+#endif
