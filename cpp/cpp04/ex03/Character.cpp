@@ -31,7 +31,7 @@ Character::Character( const Character & src )
 	{
 		this->i_slot[i] = src.i_slot[i];
 		if (src.i_slot[i] == 1)
-				this->slot[i] = src.slot[i]->clone();
+			this->slot[i] = src.slot[i]->clone();
 		else
 			this->slot[i] = NULL;
 	}
@@ -110,6 +110,7 @@ void Character::unequip(int idx)
 		return;
 	this->slot[idx] = NULL;
 	this->i_slot[idx] = 0;
+	idx -= 1;
 }
 
 void Character::use(int idx, ICharacter& target)

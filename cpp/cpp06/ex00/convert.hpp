@@ -1,0 +1,5 @@
+#ifndef CONVERT_HPP
+# define CONVERT_HPP
+#define INTMAX 2147483647
+#define INTMIN -2147483648
+#endif
