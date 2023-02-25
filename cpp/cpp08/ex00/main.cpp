@@ -15,8 +15,6 @@ int main(void)
     std::list<int>::iterator l_i;
     v_i = easyfind(v, 10);
     l_i = easyfind(l, 10);
-    std::cout << *v_i << "\n";
-    std::cout << *l_i << "\n";
     if (v_i == v.end())
     {
         std::cout << "v\n";

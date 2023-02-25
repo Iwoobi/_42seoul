@@ -49,17 +49,17 @@ Span &				Span::operator=( Span const & rhs )
 
 void Span::addNumber(int num)
 {
-	try
+	if (this->fill_n == this->n)
+		throw  Span::error();
+	std::vector<int>::iterator i = this->_data.begin();
+	for (; i != this->_data.end(); i++)
 	{
-		if (this->fill_n == this->n)
-			throw  Span::error();
-		this->_data.push_back(num);
-		this->fill_n += 1;
+		if (*i == num)
+			throw Span::sameerror();
 	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
+
+	this->_data.push_back(num);
+	this->fill_n += 1;
 }
 
 const char* Span::error::what() const throw()
@@ -72,6 +72,11 @@ const char* Span::differror::what() const throw()
 	return ("too little element");
 }
 
+const char* Span::sameerror::what() const throw()
+{
+	return ("exist same element");
+}
+
 int	Span::getn() const
 {
 	return (this->n);
@@ -81,44 +86,38 @@ int Span::getfilln() const
 	return (this->fill_n);
 }
 
+void Span::addmanyNumber(unsigned int num, int val)
+{
+	if (this->n < this->fill_n + num)
+		throw error();
+	for (unsigned int i = 0; i < num ; i++)
+	{
+		this->addNumber(val + i);
+	} 
+}
+
 int Span::shortestSpan()
 {
-	try
+	if (this->fill_n < 2)
+		throw differror();
+	std::vector<int> v(this->_data);
+	sort(v.begin(), v.end()); //애매
+
+	std::vector<int>::iterator i;
+	int val = *(v.begin() + 1) - *v.begin();
+	for (i = v.begin(); i != v.end() - 1; i++)
 	{
-		if (this->fill_n < 2)
-			throw differror();
-		std::vector<int> v(this->_data);
-		std::adjacent_difference(v.begin(), v.end(), v.begin());
-		std::vector<int>::iterator i;
-		int val = abs(*v.begin());
-		for (i = v.begin(); i != v.end(); i++)
-		{
-			if (val > abs(*i))
-				val = abs(*i);
-		}
-		return (val);
+		if (val > (*(i + 1) - *i))
+			val = (*(i + 1) - *i);
 	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
-	return (0);
+	return (val);
 }
 int Span::longestSpan()
 {
-	try
-	{
-		if (this->fill_n < 2)
-			throw differror();
-		return (*max_element(this->_data.begin(), this->_data.end())
-		- *min_element(this->_data.begin(), this->_data.end()));
-		
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-	}
-	return (0);
+	if (this->fill_n < 2)
+		throw differror();
+	return (*max_element(this->_data.begin(), this->_data.end())
+	- *min_element(this->_data.begin(), this->_data.end()));
 }
 
 std::vector<int> Span::getdata() const

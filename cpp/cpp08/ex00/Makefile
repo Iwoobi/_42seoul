@@ -1,4 +1,4 @@
-NAME = ex01
+NAME = ex00
 CC = c++
 CPPFLAGS = -Wall -Werror -Wextra -std=c++98
 SRCS =	main.cpp

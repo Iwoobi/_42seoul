@@ -18,6 +18,7 @@ class Span
 		int getfilln() const;
 		std::vector<int> getdata() const;
 		void addNumber(int num);
+		void addmanyNumber(unsigned int num, int val);
 		int shortestSpan();
 		int longestSpan();
 		Span &		operator=( Span const & rhs );
@@ -27,6 +28,11 @@ class Span
 			const char* what() const throw();
 		};
 		class differror : public std::exception
+		{
+			public:
+			const char* what() const throw();
+		};
+		class sameerror : public std::exception
 		{
 			public:
 			const char* what() const throw();
