@@ -16,8 +16,8 @@ sudo apt-get install fonts-nanum
 sudo apt-get install ibus ibus-hangul
 # google 다운로드
 # firefox는 자체적으로 http를 자동으로 https로 바꿈
-# wget -O /tmp/google-chrome-stable_current_amd64.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-# sudo apt install /tmp/google-chrome-stable_current_amd64.deb -y
+ wget -O /tmp/google-chrome-stable_current_amd64.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo apt install /tmp/google-chrome-stable_current_amd64.deb -y
 
 # wordpress 다운로드
 # wget -O /tmp/wordpress.tar.gz http://wordpress.org/latest.tar.gz

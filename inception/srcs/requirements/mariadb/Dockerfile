@@ -1,4 +1,4 @@
 FROM debian
-RUN	apt-get update -y && apt-get mariadb-server vim -y\
+RUN	apt-get update -y && apt-get mariadb-server -y\
 	
 
